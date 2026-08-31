@@ -1,5 +1,8 @@
 # =====================================================
-# CaterMatch — Local dev database (PostgreSQL + PostGIS)
+# CaterMatch — LOCAL DEV database (PostgreSQL + PostGIS)
+# Free forever · local development only.
+# Production runs free on Supabase (Path B) or
+# self-hosted Postgres (Path A) — see README §5.
 # Usage: docker compose up -d
 # =====================================================
 services:

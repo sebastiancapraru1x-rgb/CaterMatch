@@ -14,11 +14,12 @@ A two-sided classifieds marketplace — inspired by **Facebook Marketplace** and
 2. [Monetization Model](#2-business--monetization-model)
 3. [Core Features & UX Flow](#3-core-features--ux-flow)
 4. [Technical Stack](#4-technical-stack)
-5. [Database Schema](#5-database-schema)
-6. [API Route Map](#6-api-route-map)
-7. [Project Folder Structure](#7-project-folder-structure)
-8. [Build Roadmap](#8-build-roadmap)
-9. [Getting Started](#9-getting-started)
+5. [Deployment & Hosting — 100% Free Forever](#5-deployment--hosting--100-free-forever)
+6. [Database Schema](#6-database-schema)
+7. [API Route Map](#7-api-route-map)
+8. [Project Folder Structure](#8-project-folder-structure)
+9. [Build Roadmap](#9-build-roadmap)
+10. [Getting Started](#10-getting-started)
 
 ---
 
@@ -150,10 +151,63 @@ Real-time, 1-on-1 chat between hosts and vendors to negotiate pricing, terms, an
 - **JWT middleware** guards all protected routes (create/edit/delete listing, messaging, boosts).
 - **Stripe webhook signature verification** before mutating boost state.
 - CORS locked to `CLIENT_ORIGIN`.
+- **Zero-cost hosting strategy** (no trials, no credit cards) — see [Section 5 — Deployment & Hosting](#5-deployment--hosting--100-free-forever).
 
 ---
 
-## 5. Database Schema
+## 5. Deployment & Hosting — 100% Free Forever
+
+> **The CaterMatch Guarantee:** this project is designed so that **building AND running cost $0 — permanently.** No free trials, no credit cards, no behind-a-paywall surprises. The only money that can ever move is the per-transaction fee Stripe deducts from a *boost sale* (2.9% + $0.30) — nothing is ever charged to you, and nothing is ever charged to your users.
+
+### The zero-cost map
+
+| Layer | What it costs | How it's free |
+|---|---|---|
+| Building (all tools) | **$0 forever** | Open-source: Node, React, Vite, Express, Postgres, Tailwind, Socket.io |
+| Code hosting | **$0 forever** | GitHub / GitLab free private repos |
+| Frontend hosting | **$0 forever** | Cloudflare Pages or Vercel Hobby (permanent free tiers) |
+| Database + Auth + Realtime | **$0 forever** | Supabase free tier (managed Postgres, no card) |
+| Making the app reachable | **$0 forever** | Cloudflare Tunnel (Path A) |
+| Photo storage | **$0 forever** | Supabase Storage free tier (1 GB) |
+| Payments | **$0 forever to use** | Stripe — no monthly fee; only 2.9% + $0.30 per completed boost sale |
+| Domain name | **$0** | Free subdomain (`yourapp.pages.dev`) — custom domain optional later |
+
+### Path B — Free-forever cloud (RECOMMENDED)
+
+The fastest, lowest-maintenance way to run CaterMatch live:
+
+| Service | Job it takes over |
+|---|---|
+| **Cloudflare Pages** (free) | Hosts the React/Vite frontend |
+| **Supabase** (free tier) | Postgres DB + PostGIS · Auth (JWT/email) · Realtime (chat) · Storage (photos) · Edge Functions |
+| **Stripe** (free to integrate) | Boost checkout + webhooks |
+
+**Setup (one-time, no card, no trial):**
+1. Create a free **Cloudflare** account → create a **Pages** project connected to the Git repo (or drag-drop the built `client/dist`).
+2. Create a free **Supabase** project → run `server/db/schema.sql` in the SQL editor (enable the *PostGIS* extension first).
+3. Point the app at Supabase `DATABASE_URL` → done. You now have a permanently free live URL.
+
+**Honest caveats (design-decision-driven, not hidden):**
+- Free Supabase projects *pause* after ~1 week of zero activity — data stays safe, they wake on next request. Negligible once you get daily visitors.
+- Free tier caps are ~0.5–1 GB storage & bandwidth limits — generous for thousands of regular users.
+- Realtime chat can run through a Socket.io server (Path A/local) or Supabase Realtime — the chat service is written to swap between the two.
+
+### Path A — Self-hosted back-up (unlimited)
+
+The escape hatch if you ever outgrow Path B — or want total data control:
+
+1. Install Node + Postgres (with PostGIS) on your own machine / Raspberry Pi.
+2. Run `server/` with `pm2` so it restarts itself; keep it behind a free **Cloudflare Tunnel** (`cloudflared tunnel`) for a real `https://` URL with WebSocket support.
+3. Photos → local disk. Backups → `pg_dump` cron job.
+
+**What it costs:** a few cents of electricity a month ≈ free. **Trade-offs:** your machine must stay on and online; you own the sysadmin work.
+
+### Migrating Path B → Path A (an afternoon, nothing lost)
+Supabase is plain Postgres → `pg_dump` the database, import into local Postgres, point `DATABASE_URL` at localhost, swap the realtime adapter. No code rewrite, no lock-in.
+
+---
+
+## 6. Database Schema
 
 Five tables live in `server/db/schema.sql` (with enums, FKs, indexes, and a `haversine_km()` helper):
 
@@ -178,7 +232,7 @@ users ───────────────┐
 
 ---
 
-## 6. API Route Map
+## 7. API Route Map
 
 ### Auth
 | Method | Route | Description |
@@ -217,7 +271,7 @@ users ───────────────┐
 
 ---
 
-## 7. Project Folder Structure
+## 8. Project Folder Structure
 
 ```
 CaterMatch/
@@ -286,7 +340,7 @@ CaterMatch/
 
 ---
 
-## 8. Build Roadmap
+## 9. Build Roadmap
 
 | Milestone | Scope | Exit criteria |
 |---|---|---|
@@ -296,6 +350,7 @@ CaterMatch/
 | **M3 — Real-time Chat** | Conversations, messages API, Socket.io rooms | Messages appear instantly both directions |
 | **M4 — Monetization** | Stripe Checkout, webhook, boost activation UI, Featured badges/ranking | Paying a boost pins a listing to top |
 | **M5 — Ads & Polish** | Banner/infeed ad slots, responsive design, empty states, seeded demo data | Production-ready MVP |
+| **M6 — Launch for $0** | Deploy on free tier: Cloudflare Pages + Supabase (Path B); document Path A self-hosting | Live public URL at zero cost |
 | **Phase 2** | Pro Vendor subscriptions, verified badges, analytics, mobile apps | — |
 
 ### Suggested M0 quickstart
@@ -318,12 +373,13 @@ npm run dev                       # App on :5173
 
 ---
 
-## 9. Getting Started
+## 10. Getting Started
 
+### Local development (free, forever)
 ```bash
 git clone <url> CaterMatch
 cd CaterMatch
-docker compose up -d              # Postgres + PostGIS
+docker compose up -d              # local Postgres + PostGIS (dev only)
 cp .env.example server/.env       # configure DATABASE_URL, JWT_SECRET, Stripe keys
 
 # Backend
@@ -334,6 +390,10 @@ cd client && npm install && npm run dev
 ```
 
 Open **http://localhost:5173** → register → post a listing → flip the marketplace toggle → start chatting 🚀
+
+### Go live for $0 (no trials, no credit card) — see [Section 5](#5-deployment--hosting--100-free-forever)
+- **Path B (recommended):** Cloudflare Pages (frontend) + Supabase (DB, Auth, Realtime, Storage) — zero cost, zero maintenance, permanent free tiers.
+- **Path A (back-up):** run the server + DB on your own hardware behind a free Cloudflare Tunnel — unlimited, a few cents of electricity a month.
 
 ---
 

@@ -1,7 +1,9 @@
 -- =====================================================
 -- CATERMATCH — PostgreSQL Schema (v0.1)
--- Run against a PostgreSQL instance with PostGIS available
--- (see docker-compose.yml → postgis/postgis:16-3.4)
+-- Run against ANY PostgreSQL instance with PostGIS available:
+--   * Local dev  → docker compose up -d (postgis/postgis:16-3.4)
+--   * Free cloud → Supabase free tier (enable "PostGIS" extension in SQL editor)
+--   * Self-host  → local Postgres + PostGIS packages (Path A in README §5)
 -- =====================================================
 
 -- Extensions
