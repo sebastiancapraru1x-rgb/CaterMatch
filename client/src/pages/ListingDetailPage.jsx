@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { CalendarDays, Users, Wallet, MapPin, Star, ArrowLeft } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { CalendarDays, Users, Wallet, MapPin, Star, ArrowLeft, MessageSquare } from 'lucide-react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 function money(n) {
   return n == null ? null : `$${Number(n).toFixed(2)}`;
@@ -9,9 +10,12 @@ function money(n) {
 
 export default function ListingDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [listing, setListing] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [messaging, setMessaging] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +30,19 @@ export default function ListingDetailPage() {
     })();
   }, [id]);
 
+  async function handleMessage() {
+    if (!user) { navigate('/auth'); return; }
+    setMessaging(true);
+    try {
+      const res = await api.post('/conversations', { listing_id: id });
+      navigate(`/messages?conv=${res.data.conversation.id}`);
+    } catch (err) {
+      setError(err?.response?.data?.error || 'Could not start a conversation.');
+    } finally {
+      setMessaging(false);
+    }
+  }
+
   if (loading) return <p className="p-8 text-center text-slate-500">Loading…</p>;
   if (error) return (
     <div className="p-8 text-center">
@@ -36,6 +53,7 @@ export default function ListingDetailPage() {
 
   const isVendor = listing.listing_type === 'vendor_service';
   const isBoosted = listing.is_boosted && new Date(listing.boost_expires_at) > new Date();
+  const isOwner = user?.id === listing.user_id;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
@@ -106,12 +124,22 @@ export default function ListingDetailPage() {
             )}
           </div>
 
-          <div className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-            <p className="font-semibold text-slate-800">💬 Now that you've found each other…</p>
-            <p className="mt-1">
-              Direct messaging launches in the next milestone (M3). For now, contact{' '}
-              @{listing.owner_name} via the details above — 100% free, no commission.
-            </p>
+          {/* Message CTA */}
+          <div className="rounded-xl bg-slate-50 p-4">
+            {isOwner ? (
+              <p className="text-sm text-slate-500">
+                This is your listing. Interested buyers and hosts can message you here.
+              </p>
+            ) : (
+              <button
+                onClick={handleMessage}
+                disabled={messaging}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+              >
+                <MessageSquare className="h-5 w-5" />
+                {messaging ? 'Opening chat…' : `Message ${listing.owner_name}`}
+              </button>
+            )}
           </div>
         </div>
       </div>
