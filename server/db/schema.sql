@@ -7,14 +7,15 @@
 -- =====================================================
 
 -- Extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS postgis;
+-- NOTE: zero-extension schema — gen_random_uuid() is built into Postgres 13+.
+-- Optional (only if you enable PostGIS later):
+--    CREATE EXTENSION IF NOT EXISTS postgis;
 
 -- =====================================================
 -- 1. Users
 -- =====================================================
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(100) NOT NULL,
@@ -30,7 +31,7 @@ CREATE TYPE listing_type_enum AS ENUM ('vendor_service', 'host_gig');
 CREATE TYPE price_tier_enum AS ENUM ('$', '$$', '$$$', '$$$$');
 
 CREATE TABLE listings (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     listing_type listing_type_enum NOT NULL, -- 'vendor_service' OR 'host_gig'
 
@@ -68,7 +69,7 @@ CREATE TABLE listings (
 -- 3. Conversations & Messages
 -- =====================================================
 CREATE TABLE conversations (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     listing_id UUID REFERENCES listings(id) ON DELETE CASCADE,
     participant_one UUID REFERENCES users(id) ON DELETE CASCADE,
     participant_two UUID REFERENCES users(id) ON DELETE CASCADE,
@@ -77,7 +78,7 @@ CREATE TABLE conversations (
 );
 
 CREATE TABLE messages (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
     sender_id UUID REFERENCES users(id) ON DELETE CASCADE,
     message_text TEXT NOT NULL,
@@ -89,7 +90,7 @@ CREATE TABLE messages (
 -- 4. Boost Transactions (Stripe)
 -- =====================================================
 CREATE TABLE boost_transactions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     listing_id UUID REFERENCES listings(id) ON DELETE SET NULL,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     stripe_payment_id VARCHAR(255) NOT NULL,
@@ -97,23 +98,6 @@ CREATE TABLE boost_transactions (
     boost_duration_days INT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
--- =====================================================
--- Geo helper function (Haversine distance in km)
--- Used by the radius-search endpoint when not using PostGIS
--- =====================================================
-CREATE OR REPLACE FUNCTION haversine_km(
-    lat1 DOUBLE PRECISION, lng1 DOUBLE PRECISION,
-    lat2 DOUBLE PRECISION, lng2 DOUBLE PRECISION
-) RETURNS DOUBLE PRECISION AS $$
-    SELECT 2 * 6371 * asin(
-        sqrt(
-            power(sin(radians(lat2 - lat1) / 2), 2) +
-            cos(radians(lat1)) * cos(radians(lat2)) *
-            power(sin(radians(lng2 - lng1) / 2), 2)
-        )
-    );
-$$ LANGUAGE SQL IMMUTABLE;
 
 -- =====================================================
 -- Indexes for Fast Geo & Boost Filtering
