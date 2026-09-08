@@ -10,6 +10,32 @@ import { activateBoost, recordBoostTransaction } from '../services/boost.service
 
 const ALLOWED_DURATIONS = [3, 7, 14];
 
+/** Reads the DEV_MODE_EMAILS allowlist from env (comma-separated, case-insensitive). */
+function getDevModeEmails() {
+  return (process.env.DEV_MODE_EMAILS || '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/** True when this email belongs to a staff/dev member of the app. */
+function isStaffEmail(email) {
+  return getDevModeEmails().includes(String(email).toLowerCase());
+}
+
+/**
+ * Determines whether THIS user should get a simulated (free, no Stripe)
+ * boost instead of a real Stripe payment:
+ *   - No Stripe configured → everyone simulates (local dev default)
+ *   - Stripe configured + staff allowlist → only staff simulate (free testing)
+ *   - Stripe configured, empty list → nobody simulates (real payments)
+ */
+function shouldSimulateFor(userEmail) {
+  if (!stripe) return true; // no real Stripe configured yet
+  if (!getDevModeEmails().length) return false; // Stripe on, no staff list → real
+  return isStaffEmail(userEmail);
+}
+
 /** GET /api/boosts — public tier list for UI display. */
 export function listTiers(_req, res) {
   return res.json({ tiers: BOOST_TIERS });
@@ -44,8 +70,8 @@ export async function createCheckoutSession(req, res, next) {
     const isOwner = await ensureListingOwner(res, listing_id, req.user.id);
     if (!isOwner) return;
 
-    // ---- DEV MODE: simulate payment (requires no Stripe keys) ----
-    if (!stripe) {
+    // ---- DEV MODE: simulate payment (free) for staff / unconfigured Stripe ----
+    if (shouldSimulateFor(req.user.email)) {
       const amountPaid = tier.amount;
       await withTransaction(async (client) => {
         await activateBoost(client, { listingId: listing_id, days: duration });
@@ -95,11 +121,23 @@ export async function createCheckoutSession(req, res, next) {
   }
 }
 
-/** GET /api/boosts/stripe-status — is real Stripe configured & reachable? */
-export async function stripeStatus(_req, res, next) {
+/**
+ * GET /api/boosts/stripe-status — Stripe health.
+ * Staff/dev users (DEV_MODE_EMAILS) get full detail; regular users
+ * get only the minimal "customers don't need this" response.
+ */
+export async function stripeStatus(req, res, next) {
   try {
+    const isStaff = req.user ? isStaffEmail(req.user.email) : false;
+
+    // Non-staff only ever see a neutral pass/fail — no internals.
+    if (!isStaff) {
+      return res.json({ is_staff: false, enabled: Boolean(stripe) });
+    }
+
     if (!stripe) {
       return res.json({
+        is_staff: true,
         enabled: false,
         mode: 'dev-simulated',
         message: 'No STRIPE_SECRET_KEY set — boosts are simulated. Add a free Stripe test key to enable real payments.',
@@ -107,6 +145,7 @@ export async function stripeStatus(_req, res, next) {
     }
     const acct = await stripe.balance.retrieve();
     return res.json({
+      is_staff: true,
       enabled: true,
       mode: acct.livemode ? 'live' : 'test',
       message: acct.livemode

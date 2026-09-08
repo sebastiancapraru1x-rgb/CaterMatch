@@ -70,8 +70,8 @@ export default function BoostPage() {
         🚚 <b>Food trucks</b> boost to win more gigs. 🎪 <b>Event hosts</b> boost when you need caterers <b>fast</b> (urgent date, last-minute guest count) — matches the "Urgent / ASAP" urgency of an event gig.
       </p>
 
-      {/* Stripe payment mode indicator */}
-      {stripeInfo && (
+      {/* Stripe payment mode indicator — staff/dev only */}
+      {stripeInfo?.is_staff && (
         <div className={`mb-4 flex items-start gap-2 rounded-lg border p-3 text-sm ${
           stripeInfo.enabled
             ? 'border-green-200 bg-green-50 text-green-800'
