@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { CalendarDays, Users, Wallet, MapPin, Star, ArrowLeft, MessageSquare } from 'lucide-react';
+import { CalendarDays, Users, Wallet, MapPin, Star, ArrowLeft, MessageSquare, Sparkles } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -124,12 +124,31 @@ export default function ListingDetailPage() {
             )}
           </div>
 
-          {/* Message CTA */}
+          {/* Owner panel: boost CTA */}
           <div className="rounded-xl bg-slate-50 p-4">
             {isOwner ? (
-              <p className="text-sm text-slate-500">
-                This is your listing. Interested buyers and hosts can message you here.
-              </p>
+              <div className="space-y-3">
+                <p className="text-sm text-slate-500">
+                  This is your listing. Interested buyers and hosts can message you here.
+                </p>
+                {isBoosted ? (
+                  <p className="flex items-center gap-1 text-sm font-semibold text-brand-600">
+                    <Star className="h-4 w-4 fill-current" /> Featured
+                    {listing.boost_expires_at && (
+                      <span className="font-normal text-slate-500">
+                        · until {new Date(listing.boost_expires_at).toLocaleDateString()}
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  <Link
+                    to={`/boost?listing_id=${listing.id}`}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50"
+                  >
+                    <Sparkles className="h-5 w-5" /> Boost this listing
+                  </Link>
+                )}
+              </div>
             ) : (
               <button
                 onClick={handleMessage}

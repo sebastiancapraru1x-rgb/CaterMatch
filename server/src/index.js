@@ -19,6 +19,18 @@ const httpServer = createServer(app);
 
 // ---- Global middleware ----
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
+
+// Stripe webhook needs the RAW body for signature verification,
+// so it's handled before express.json() parses everything else.
+app.post('/api/boosts/stripe/webhook', express.raw({ type: '*/*' }), async (req, res, next) => {
+  try {
+    const { handleStripeWebhook } = await import('./controllers/boosts.controller.js');
+    await handleStripeWebhook(req, res);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 

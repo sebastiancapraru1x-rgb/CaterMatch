@@ -4,12 +4,14 @@ import { authRequired } from '../middleware/auth.js';
 
 const router = Router();
 
+// Public tier list
 router.get('/', listTiers);
+
+// Protected: create Stripe Checkout (or dev-mode simulate)
 router.post('/checkout', authRequired, createCheckoutSession);
 
-// Stripe webhook — implemented in M4 (Stripe dashboard points here).
-router.post('/stripe/webhook', (_req, res) =>
-  res.status(501).json({ error: 'Boost activation webhook lands in the M4 milestone.' })
-);
+// NOTE: The Stripe webhook (POST /api/boosts/stripe/webhook) is mounted
+// directly in src/index.js BEFORE express.json() because it needs the
+// RAW body for signature verification — see index.js.
 
 export default router;
