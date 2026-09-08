@@ -95,6 +95,29 @@ export async function createCheckoutSession(req, res, next) {
   }
 }
 
+/** GET /api/boosts/stripe-status — is real Stripe configured & reachable? */
+export async function stripeStatus(_req, res, next) {
+  try {
+    if (!stripe) {
+      return res.json({
+        enabled: false,
+        mode: 'dev-simulated',
+        message: 'No STRIPE_SECRET_KEY set — boosts are simulated. Add a free Stripe test key to enable real payments.',
+      });
+    }
+    const acct = await stripe.balance.retrieve();
+    return res.json({
+      enabled: true,
+      mode: acct.livemode ? 'live' : 'test',
+      message: acct.livemode
+        ? 'Stripe LIVE mode — real money will move.'
+        : 'Stripe TEST mode — test cards only, no real charges.',
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 /**
  * POST /api/boosts/stripe/webhook
  * Stripe sends signed events here. Requires express.raw() body

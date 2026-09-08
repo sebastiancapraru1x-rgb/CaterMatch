@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Sparkles, ArrowLeft, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowLeft, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,9 +14,11 @@ export default function BoostPage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [stripeInfo, setStripeInfo] = useState(null);
 
   useEffect(() => {
     api.get('/boosts').then((res) => setTiers(res.data.tiers || [])).catch(() => {});
+    api.get('/boosts/stripe-status').then((res) => setStripeInfo(res.data)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -67,6 +69,21 @@ export default function BoostPage() {
       <p className="mb-6 rounded-lg bg-orange-50 p-3 text-sm text-orange-800">
         🚚 <b>Food trucks</b> boost to win more gigs. 🎪 <b>Event hosts</b> boost when you need caterers <b>fast</b> (urgent date, last-minute guest count) — matches the "Urgent / ASAP" urgency of an event gig.
       </p>
+
+      {/* Stripe payment mode indicator */}
+      {stripeInfo && (
+        <div className={`mb-4 flex items-start gap-2 rounded-lg border p-3 text-sm ${
+          stripeInfo.enabled
+            ? 'border-green-200 bg-green-50 text-green-800'
+            : 'border-amber-200 bg-amber-50 text-amber-800'
+        }`}>
+          <Zap className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <b>{stripeInfo.enabled ? 'Stripe connected' : 'Dev mode — payments simulated'}</b>
+            <p className="mt-0.5 text-xs opacity-90">{stripeInfo.message}</p>
+          </div>
+        </div>
+      )}
 
       {isSuccess && (
         <div className="mb-4 flex items-start gap-2 rounded-lg bg-green-50 p-4 text-sm text-green-800">
