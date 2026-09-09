@@ -17,6 +17,7 @@ import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { splitSqlStatements } from '../lib/sql.js';
+import bcrypt from 'bcryptjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCHEMA_SQL = readFileSync(resolve(__dirname, '../../db/schema.sql'), 'utf8');
@@ -55,6 +56,75 @@ async function runMigrations(database) {
   }
 }
 
+// Auto-seed demo data on first run (only if users table is empty).
+const DEMO_USERS = [
+  { email: 'vendor@demo.com', full_name: 'Taco Titan', phone: '555-0101' },
+  { email: 'host@demo.com', full_name: 'Sarah Event Planner', phone: '555-0102' },
+  { email: 'sebastiancapraru1x@gmail.com', full_name: 'Sebastian Capraru', phone: null },
+];
+
+const DEMO_LISTINGS = [
+  {
+    user_email: 'vendor@demo.com',
+    listing_type: 'vendor_service',
+    title: 'Taco Titan — street tacos & burritos',
+    description: 'Authentic Mexican street food truck. Classic al pastor, birria, and vegetarian options. Fully licensed and insured.',
+    category: 'Tacos',
+    city: 'Toronto', state_province: 'Ontario', postal_code: 'M5V2T6',
+    latitude: 43.6532, longitude: -79.3832, service_radius_km: 50,
+    price_tier: '$$', photos: [],
+    event_date: null, expected_guests: null, budget_estimate: null,
+  },
+  {
+    user_email: 'host@demo.com',
+    listing_type: 'host_gig',
+    title: 'Backyard BBQ birthday party',
+    description: 'Hosting ~60 guests for a summer backyard BBQ. Looking for a local BBQ truck for a 4-hour event. Food preferences: BBQ, burgers, sides.',
+    category: 'BBQ',
+    city: 'Etobicoke', state_province: 'Ontario', postal_code: 'M9C1A1',
+    latitude: 43.6525, longitude: -79.5599, service_radius_km: 25,
+    price_tier: null, photos: [],
+    event_date: '2026-09-15', expected_guests: 60, budget_estimate: 900.0,
+  },
+];
+
+async function autoSeed(database) {
+  try {
+    const chk = await database.query('SELECT COUNT(*)::int AS n FROM users');
+    if (chk.rows[0]?.n > 0) return; // already has data
+
+    console.log('🌱 First run — seeding demo data...');
+    const password = await bcrypt.hash('password123', 10);
+
+    const userIds = {};
+    for (const u of DEMO_USERS) {
+      const ins = await database.query(
+        `INSERT INTO users (email, password_hash, full_name, phone_number)
+         VALUES ($1,$2,$3,$4) RETURNING id`,
+        [u.email, password, u.full_name, u.phone]
+      );
+      userIds[u.email] = ins.rows?.[0]?.id ?? ins[0]?.id;
+      console.log('  ✓ user seeded:', u.email);
+    }
+
+    for (const l of DEMO_LISTINGS) {
+      await database.query(
+        `INSERT INTO listings
+           (user_id, listing_type, title, description, category, city, state_province, postal_code,
+            latitude, longitude, service_radius_km, price_tier, event_date, expected_guests, budget_estimate, photos)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
+        [userIds[l.user_email], l.listing_type, l.title, l.description, l.category, l.city,
+          l.state_province, l.postal_code, l.latitude, l.longitude, l.service_radius_km,
+          l.price_tier, l.event_date, l.expected_guests, l.budget_estimate, l.photos]
+      );
+      console.log('  ✓ listing seeded:', l.title);
+    }
+    console.log('✅ Seed complete.');
+  } catch (err) {
+    console.warn('⚠️ auto-seed skipped:', err.message);
+  }
+}
+
 async function doInit() {
   const requested = (process.env.DB_DRIVER || 'auto').toLowerCase();
 
@@ -70,6 +140,7 @@ async function doInit() {
         await pgPool.query('SELECT 1');
         driver = 'postgres';
         await runMigrations(pgPool);
+        await autoSeed(pgPool);
         console.log('🗄️  Database driver: PostgreSQL (DATABASE_URL)');
         return;
       } catch (err) {
@@ -95,6 +166,7 @@ async function doInit() {
     console.log('🗄️  Embedded database initialised with schema.sql');
   }
   await runMigrations(pglite);
+  await autoSeed(pglite);
 
   driver = 'embedded';
   console.log('🗄️  Database driver: embedded PostgreSQL (PGlite, zero-install)');
