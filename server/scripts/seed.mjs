@@ -12,6 +12,7 @@ const password = await bcrypt.hash('password123', 10);
 const users = [
   { email: 'vendor@demo.com', full_name: 'Taco Titan', phone: '555-0101' },
   { email: 'host@demo.com', full_name: 'Sarah Event Planner', phone: '555-0102' },
+  { email: 'sebastiancapraru1x@gmail.com', full_name: 'Sebastian Capraru', phone: null },
 ];
 
 await ensureDb();
