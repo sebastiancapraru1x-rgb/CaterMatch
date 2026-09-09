@@ -7,21 +7,9 @@
 import { BOOST_TIERS, stripe } from '../config/stripe.js';
 import { withTransaction, query } from '../config/db.js';
 import { activateBoost, recordBoostTransaction } from '../services/boost.service.js';
+import { isStaffEmail, getDevModeEmails } from '../services/staff.service.js';
 
 const ALLOWED_DURATIONS = [3, 7, 14];
-
-/** Reads the DEV_MODE_EMAILS allowlist from env (comma-separated, case-insensitive). */
-function getDevModeEmails() {
-  return (process.env.DEV_MODE_EMAILS || '')
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-/** True when this email belongs to a staff/dev member of the app. */
-function isStaffEmail(email) {
-  return getDevModeEmails().includes(String(email).toLowerCase());
-}
 
 /**
  * Determines whether THIS user should get a simulated (free, no Stripe)
@@ -30,7 +18,7 @@ function isStaffEmail(email) {
  *   - Stripe configured + staff allowlist → only staff simulate (free testing)
  *   - Stripe configured, empty list → nobody simulates (real payments)
  */
-function shouldSimulateFor(userEmail) {
+async function shouldSimulateFor(userEmail) {
   if (!stripe) return true; // no real Stripe configured yet
   if (!getDevModeEmails().length) return false; // Stripe on, no staff list → real
   return isStaffEmail(userEmail);
@@ -71,7 +59,7 @@ export async function createCheckoutSession(req, res, next) {
     if (!isOwner) return;
 
     // ---- DEV MODE: simulate payment (free) for staff / unconfigured Stripe ----
-    if (shouldSimulateFor(req.user.email)) {
+    if (await shouldSimulateFor(req.user.email)) {
       const amountPaid = tier.amount;
       await withTransaction(async (client) => {
         await activateBoost(client, { listingId: listing_id, days: duration });
@@ -128,7 +116,7 @@ export async function createCheckoutSession(req, res, next) {
  */
 export async function stripeStatus(req, res, next) {
   try {
-    const isStaff = req.user ? isStaffEmail(req.user.email) : false;
+    const isStaff = req.user ? await isStaffEmail(req.user.email) : false;
 
     // Non-staff only ever see a neutral pass/fail — no internals.
     if (!isStaff) {

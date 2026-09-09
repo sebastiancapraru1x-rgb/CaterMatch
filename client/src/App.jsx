@@ -6,6 +6,7 @@ import CreateListingPage from './pages/CreateListingPage';
 import ListingDetailPage from './pages/ListingDetailPage';
 import MessagesPage from './pages/MessagesPage';
 import BoostPage from './pages/BoostPage';
+import AdminPage from './pages/AdminPage';
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
@@ -31,6 +32,7 @@ export default function App() {
             element={<Protected><MessagesPage /></Protected>}
           />
           <Route path="/boost" element={<BoostPage />} />
+<Route path="/admin" element={<Protected><AdminPage /></Protected>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

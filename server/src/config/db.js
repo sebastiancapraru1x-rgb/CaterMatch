@@ -35,6 +35,26 @@ export function ensureDb() {
   return initPromise;
 }
 
+// Lightweight migrations run on every start (idempotent).
+const MIGRATIONS = [
+  // Staff/admin allowlist — DB-backed so the admin panel can manage it.
+  `CREATE TABLE IF NOT EXISTS staff_members (
+     email VARCHAR(255) PRIMARY KEY,
+     added_by VARCHAR(255),
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   )`,
+];
+
+async function runMigrations(database) {
+  for (const stmt of MIGRATIONS) {
+    try {
+      await database.query(stmt);
+    } catch (err) {
+      console.warn('⚠️ migration skipped:', err.message);
+    }
+  }
+}
+
 async function doInit() {
   const requested = (process.env.DB_DRIVER || 'auto').toLowerCase();
 
@@ -49,6 +69,7 @@ async function doInit() {
         });
         await pgPool.query('SELECT 1');
         driver = 'postgres';
+        await runMigrations(pgPool);
         console.log('🗄️  Database driver: PostgreSQL (DATABASE_URL)');
         return;
       } catch (err) {
@@ -73,6 +94,7 @@ async function doInit() {
     }
     console.log('🗄️  Embedded database initialised with schema.sql');
   }
+  await runMigrations(pglite);
 
   driver = 'embedded';
   console.log('🗄️  Database driver: embedded PostgreSQL (PGlite, zero-install)');
