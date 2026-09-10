@@ -4,7 +4,15 @@ import api from '../services/api';
 const AuthContext = createContext(null);
 
 async function checkStaff(email) {
-  return email?.toLowerCase() === 'sebastiancapraru1x@gmail.com';
+  // Hardcoded super-admin (always has access)
+  if (email?.toLowerCase() === 'sebastiancapraru1x@gmail.com') return true;
+  // Also check the staff list (managed from the Dev tab)
+  try {
+    const res = await api.get('/api/admin/me');
+    return res.data?.is_staff === true;
+  } catch {
+    return false;
+  }
 }
 
 export function AuthProvider({ children }) {
