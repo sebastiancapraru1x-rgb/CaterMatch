@@ -14,15 +14,16 @@ import { staffRequired } from '../middleware/staff.js';
 
 const router = Router();
 
-// All admin routes require auth + staff membership.
-router.use(authRequired, staffRequired);
+// Public (auth-only): check current user's staff status (used by frontend on login).
+// No staffRequired here — this IS the staff check.
+router.get('/me', authRequired, me);
 
-router.get('/me', me);
+// Everything else requires staff membership.
+router.use(staffRequired);
+
 router.get('/stats', stats);
 router.get('/users', users);
 router.get('/staff', staff);
-router.post('/staff', addStaff);
-router.delete('/staff/:email', removeStaff);
 router.get('/transactions', transactions);
 router.get('/stripe-status', stripeStatus);
 

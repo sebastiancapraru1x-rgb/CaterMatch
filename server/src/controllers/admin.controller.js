@@ -9,18 +9,24 @@ import {
   addStaffMember,
   removeStaffMember,
   countStaff,
+  isStaffEmail,
 } from '../services/staff.service.js';
 
 /** GET /api/admin/me — who am I (staff status + profile). */
-export async function me(req, res) {
-  const rows = await query(
-    'SELECT id, email, full_name, avatar_url, created_at FROM users WHERE id = $1',
-    [req.user.id]
-  );
-  return res.json({
-    is_staff: true,
-    user: rows[0] || { id: req.user.id, email: req.user.email, full_name: req.user.full_name },
-  });
+export async function me(req, res, next) {
+  try {
+    const rows = await query(
+      'SELECT id, email, full_name, avatar_url, created_at FROM users WHERE id = $1',
+      [req.user.id]
+    );
+    const staff = await isStaffEmail(req.user.email);
+    return res.json({
+      is_staff: staff,
+      user: rows[0] || { id: req.user.id, email: req.user.email, full_name: req.user.full_name },
+    });
+  } catch (err) {
+    return next(err);
+  }
 }
 
 /** GET /api/admin/stats — headline numbers. */

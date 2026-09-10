@@ -20,13 +20,15 @@ export default function Header({ mode }) {
         <nav className="flex items-center gap-3">
           {user ? (
             <>
-              {isStaff && (
+              {isStaff ? (
                 <Link
                   to="/admin"
                   className="flex items-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-100"
                 >
-                  🛠️ Dev
+                  Dev Tab
                 </Link>
+              ) : (
+                <span className="text-xs text-red-500">not staff</span>
               )}
               <Link
                 to="/listings/new"
