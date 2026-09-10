@@ -5,6 +5,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isStaff, setIsStaff] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -12,7 +13,14 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('cm_token');
     if (!token) { setLoading(false); return; }
     api.get('/auth/me')
-      .then((res) => setUser(res.data.user))
+      .then((res) => {
+        setUser(res.data.user);
+        // Check staff status
+        return api.get('/api/admin/me').catch(() => null);
+      })
+      .then((staffRes) => {
+        if (staffRes?.data?.is_staff) setIsStaff(true);
+      })
       .catch(() => {
         localStorage.removeItem('cm_token');
       })
@@ -22,10 +30,11 @@ export function AuthProvider({ children }) {
   function logout() {
     localStorage.removeItem('cm_token');
     setUser(null);
+    setIsStaff(false);
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, logout, loading, isStaff }}>
       {children}
     </AuthContext.Provider>
   );

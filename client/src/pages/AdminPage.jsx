@@ -59,7 +59,10 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
-      <h1 className="text-3xl font-bold">⚙️ Admin Panel</h1>
+      <a href="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700">
+        ← Back to browse
+      </a>
+      <h1 className="text-3xl font-bold">⚙️ Dev Panel</h1>
       <section className="bg-white rounded-xl shadow p-6">
         <h2 className="text-xl font-semibold mb-2">Logged in as</h2>
         <p><span className="font-medium">Name:</span> {me.user.full_name}</p>
