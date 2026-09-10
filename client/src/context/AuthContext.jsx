@@ -3,13 +3,8 @@ import api from '../services/api';
 
 const AuthContext = createContext(null);
 
-async function checkStaff() {
-  try {
-    const res = await api.get('/api/admin/me');
-    return res.data?.is_staff === true;
-  } catch {
-    return false;
-  }
+async function checkStaff(email) {
+  return email?.toLowerCase() === 'sebastiancapraru1x@gmail.com';
 }
 
 export function AuthProvider({ children }) {
@@ -24,7 +19,7 @@ export function AuthProvider({ children }) {
     api.get('/auth/me')
       .then((res) => {
         setUser(res.data.user);
-        return checkStaff();
+        return checkStaff(res.data.user?.email);
       })
       .then((staff) => setIsStaff(staff))
       .catch(() => {
@@ -37,7 +32,7 @@ export function AuthProvider({ children }) {
     return api.post('/auth/login', { email, password }).then((res) => {
       localStorage.setItem('cm_token', res.data.token);
       setUser(res.data.user);
-      checkStaff().then((staff) => setIsStaff(staff));
+      checkStaff(email).then((staff) => setIsStaff(staff));
       return res.data.user;
     });
   }
@@ -46,7 +41,7 @@ export function AuthProvider({ children }) {
     return api.post('/auth/register', { email, password, full_name: fullName, phone_number: phone }).then((res) => {
       localStorage.setItem('cm_token', res.data.token);
       setUser(res.data.user);
-      checkStaff().then((staff) => setIsStaff(staff));
+      checkStaff(email).then((staff) => setIsStaff(staff));
       return res.data.user;
     });
   }
