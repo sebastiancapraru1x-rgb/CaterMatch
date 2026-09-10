@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function AuthPage() {
@@ -8,7 +7,7 @@ export default function AuthPage() {
   const [form, setForm] = useState({ email: '', password: '', full_name: '', phone_number: '' });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const { setUser } = useAuth();
+  const { login, register } = useAuth();
   const navigate = useNavigate();
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -18,13 +17,11 @@ export default function AuthPage() {
     setError('');
     setBusy(true);
     try {
-      const url = isRegister ? '/auth/register' : '/auth/login';
-      const body = isRegister
-        ? form
-        : { email: form.email, password: form.password };
-      const res = await api.post(url, body);
-      localStorage.setItem('cm_token', res.data.token);
-      setUser(res.data.user);
+      if (isRegister) {
+        await register(form.email, form.password, form.full_name, form.phone_number);
+      } else {
+        await login(form.email, form.password);
+      }
       navigate('/');
     } catch (err) {
       setError(err?.response?.data?.error || 'Something went wrong.');
