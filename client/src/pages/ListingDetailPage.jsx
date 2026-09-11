@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { CalendarDays, Users, Wallet, MapPin, Star, ArrowLeft, MessageSquare, Sparkles } from 'lucide-react';
+import {
+  CalendarDays, Users, Wallet, MapPin, Star,
+  ArrowLeft, MessageSquare, Sparkles
+} from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -61,16 +64,18 @@ export default function ListingDetailPage() {
         <ArrowLeft className="h-4 w-4" /> Back to listings
       </Link>
 
-      <div className="card overflow-hidden">
-        {/* banner */}
-        <div className="relative flex h-56 w-full items-center justify-center bg-gradient-to-br from-orange-100 to-amber-50">
+      <div className="card overflow-hidden border border-slate-200/70 shadow-xl transition-shadow hover:shadow-2xl">
+        <div className="relative h-64 w-full">
           {listing.photos?.length > 0 ? (
-            <img src={listing.photos[0]} alt={listing.title} className="h-full w-full object-cover" />
+            <img src={listing.photos[0]} alt={listing.title} className="h-full w-full object-cover object-center" />
           ) : (
-            <span className="text-6xl">{isVendor ? '🚚' : '🎪'}</span>
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-100 to-amber-50">
+              <span className="text-7xl">{isVendor ? '🚚' : '🎪'}</span>
+            </div>
           )}
+
           {isBoosted && (
-            <span className="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white">
+            <span className="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-brand-600 px-3 py-1 text-xs font-bold text-white shadow-md">
               <Star className="h-3 w-3 fill-current" /> Featured
             </span>
           )}
@@ -93,30 +98,24 @@ export default function ListingDetailPage() {
 
           <p className="text-slate-700">{listing.description}</p>
 
-          <div className="grid gap-2 rounded-xl bg-orange-50/60 p-4 text-sm text-slate-700 sm:grid-cols-2">
+          <div className="grid gap-2 rounded-xl bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-2">
             <span className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-brand-600" />
               {listing.city}, {listing.state_province}
             </span>
-
             {isVendor && (
-              <span className="flex items-center gap-2">
-                📍 Serves within {listing.service_radius_km} km
-              </span>
+              <span className="flex items-center gap-2">📍 Serves within {listing.service_radius_km} km</span>
             )}
-
             {!isVendor && listing.event_date && (
               <span className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-brand-600" /> {listing.event_date}
               </span>
             )}
-
             {!isVendor && listing.expected_guests && (
               <span className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-brand-600" /> {listing.expected_guests} guests expected
               </span>
             )}
-
             {!isVendor && listing.budget_estimate && (
               <span className="flex items-center gap-2 font-semibold text-brand-600">
                 <Wallet className="h-4 w-4" /> Budget {money(listing.budget_estimate)}
@@ -124,12 +123,11 @@ export default function ListingDetailPage() {
             )}
           </div>
 
-          {/* Owner panel: boost CTA */}
           <div className="rounded-xl bg-slate-50 p-4">
             {isOwner ? (
               <div className="space-y-3">
                 <p className="text-sm text-slate-500">
-                  This is your listing. Interested buyers and hosts can message you here.
+                  This is your listing. Interested parties can message you directly.
                 </p>
                 {isBoosted ? (
                   <p className="flex items-center gap-1 text-sm font-semibold text-brand-600">
@@ -143,7 +141,7 @@ export default function ListingDetailPage() {
                 ) : (
                   <Link
                     to={`/boost?listing_id=${listing.id}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50 transition"
                   >
                     <Sparkles className="h-5 w-5" /> Boost this listing
                   </Link>
@@ -153,7 +151,7 @@ export default function ListingDetailPage() {
               <button
                 onClick={handleMessage}
                 disabled={messaging}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-60 transition"
               >
                 <MessageSquare className="h-5 w-5" />
                 {messaging ? 'Opening chat…' : `Message ${listing.owner_name}`}

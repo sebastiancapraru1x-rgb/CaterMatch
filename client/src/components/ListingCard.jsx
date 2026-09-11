@@ -12,26 +12,21 @@ export default function ListingCard({ listing }) {
   return (
     <Link
       to={`/listings/${listing.id}`}
-      className={`group card relative flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md ${
+      className={`group relative flex flex-col overflow-hidden card transition-transform hover:-translate-y-0.5 hover:shadow-lg ${
         isBoosted ? 'ring-2 ring-brand-500' : ''
       }`}
     >
-      {/* Featured badge */}
+      {/* Featured badge */}\
       {isBoosted && (
         <span className="absolute left-3 top-3 z-10 flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-xs font-bold text-white">
           <Star className="h-3 w-3 fill-current" /> Featured
         </span>
       )}
 
-      {/* Photo or placeholder */}
-      <div className="h-36 w-full bg-gradient-to-br from-orange-100 to-amber-50">
+      {/* Photo or placeholder */}\
+      <div className="h-40 w-full bg-gradient-to-br from-orange-100 to-amber-50">
         {listing.photos?.length > 0 ? (
-          <img
-            src={listing.photos[0]}
-            alt={listing.title}
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
+          <img src={listing.photos[0]} alt={listing.title} className="h-full w-full object-cover" loading="lazy" />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-4xl">
             {isVendor ? '🚚' : '🎪'}
@@ -53,11 +48,9 @@ export default function ListingCard({ listing }) {
           <span className="flex items-center gap-1">
             <MapPin className="h-3.5 w-3.5" /> {listing.city}
           </span>
-
           {isVendor && listing.service_radius_km && (
             <span>📍 serves within {listing.service_radius_km} km</span>
           )}
-
           {!isVendor && (
             <>
               {listing.event_date && (

@@ -23,8 +23,21 @@ export default function CreateListingPage() {
   });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [photoInput, setPhotoInput] = useState('');
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  function addPhoto() {
+    const url = photoInput.trim();
+    if (!url) return;
+    setPhotos((p) => [...p, url]);
+    setPhotoInput('');
+  }
+
+  function removePhoto(index) {
+    setPhotos((p) => p.filter((_, i) => i !== index));
+  }
 
   async function submit(e) {
     e.preventDefault();
@@ -36,6 +49,7 @@ export default function CreateListingPage() {
         latitude: DEFAULT_CITY_COORDS.lat,
         longitude: DEFAULT_CITY_COORDS.lng,
         ...form,
+        photos,
         expected_guests: form.expected_guests ? Number(form.expected_guests) : null,
         budget_estimate: form.budget_estimate ? Number(form.budget_estimate) : null,
         service_radius_km: type === 'vendor_service' ? Number(form.service_radius_km) : null,
@@ -154,6 +168,31 @@ export default function CreateListingPage() {
         )}
 
         {error && <p className="text-sm font-semibold text-red-600">{error}</p>}
+
+        {/* Photo URLs */}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-slate-700">Photos (paste image URLs)</label>
+          <div className="flex gap-2 mb-2">
+            <input
+              value={photoInput}
+              onChange={(e) => setPhotoInput(e.target.value)}
+              placeholder="https://example.com/photo.jpg"
+              className="flex-1 rounded-lg border border-slate-300 px-3 py-2"
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addPhoto(); } }}
+            />
+            <button type="button" onClick={addPhoto} className="rounded-lg bg-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-300">Add</button>
+          </div>
+          {photos.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {photos.map((url, i) => (
+                <div key={i} className="relative group">
+                  <img src={url} alt="" className="h-24 w-full rounded-lg object-cover" onError={(e) => e.target.style.display = 'none'} />
+                  <button type="button" onClick={() => removePhoto(i)} className="absolute top-1 right-1 rounded-full bg-red-500 text-white w-5 h-5 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100">×</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <button
           type="submit"
