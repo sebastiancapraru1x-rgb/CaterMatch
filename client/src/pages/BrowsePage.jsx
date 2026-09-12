@@ -1,26 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Truck, CalendarDays } from 'lucide-react';
+import { Truck, CalendarDays, SlidersHorizontal } from 'lucide-react';
 import api from '../services/api';
 import MarketplaceToggle from '../components/MarketplaceToggle';
 import RadiusPicker from '../components/RadiusPicker';
-import CategoryFilter from '../components/CategoryFilter';
 import ListingCard from '../components/ListingCard';
 import Header from '../components/Header';
 
 const CATEGORIES = [
-  'all', 'Ice Cream', 'Tacos', 'BBQ', 'Desserts', 'Coffee/Beverage',
-  'Pizza', 'Vegan', 'Halal', 'Other',
+  { value: 'all', label: 'All Categories' },
+  { value: 'Ice Cream', label: 'Ice Cream' },
+  { value: 'Tacos', label: 'Tacos' },
+  { value: 'BBQ', label: 'BBQ' },
+  { value: 'Desserts', label: 'Desserts' },
+  { value: 'Coffee/Beverage', label: 'Coffee/Beverage' },
+  { value: 'Pizza', label: 'Pizza' },
+  { value: 'Vegan', label: 'Vegan' },
+  { value: 'Halal', label: 'Halal' },
+  { value: 'Other', label: 'Other' },
 ];
 
 const RADIUS_OPTIONS = [10, 25, 50, 100];
 
 export default function BrowsePage() {
-  const [mode, setMode] = useState('vendor_service'); // 'vendor_service' | 'host_gig'
+  const [mode, setMode] = useState('vendor_service');
   const [radius, setRadius] = useState(50);
   const [category, setCategory] = useState('all');
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [catOpen, setCatOpen] = useState(false);
 
   const fetchListings = useCallback(async () => {
     setLoading(true);
@@ -45,30 +53,56 @@ export default function BrowsePage() {
     fetchListings();
   }, [fetchListings]);
 
+  const selectedCat = CATEGORIES.find((c) => c.value === category) || CATEGORIES[0];
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <Header mode={mode} />
 
       <main className="mx-auto max-w-5xl px-4 py-6">
-        {/* Dual marketplace toggle */}
         <MarketplaceToggle mode={mode} onChange={setMode} />
 
-        {/* Filters */}
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900 sm:flex sm:items-center sm:gap-3 sm:p-4">
           <RadiusPicker radius={radius} onChange={setRadius} options={RADIUS_OPTIONS} />
-          <CategoryFilter category={category} onChange={setCategory} categories={CATEGORIES} />
+
+          <div className="relative mt-2 sm:mt-0 sm:flex-1">
+            <button
+              onClick={() => setCatOpen(!catOpen)}
+              className="flex w-full items-center justify-between rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:border-brand-400 dark:border-slate-600 dark:text-slate-300"
+            >
+              <span>{selectedCat.label}</span>
+              <SlidersHorizontal className="h-4 w-4 text-slate-400" />
+            </button>
+
+            {catOpen && (
+              <div className="absolute top-full left-0 mt-1 w-full max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 z-10">
+                {CATEGORIES.map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => { setCategory(c.value); setCatOpen(false); }}
+                    className={`block w-full px-3 py-2 text-left text-sm ${
+                      category === c.value
+                        ? 'bg-brand-50 font-semibold text-brand-700'
+                        : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <button
             onClick={fetchListings}
-            className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+            className="mt-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 sm:mt-0"
           >
             Refresh
           </button>
         </div>
 
-        {/* Feed */}
         <section className="mt-6">
-          <h1 className="mb-4 flex items-center gap-2 text-xl font-bold text-slate-900">
+          <h1 className="mb-4 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-100">
             {mode === 'vendor_service' ? (
               <><Truck className="h-5 w-5 text-brand-600" /> Food trucks near you</>
             ) : (
@@ -80,10 +114,15 @@ export default function BrowsePage() {
           {error && <p className="py-10 text-center text-red-600">{error}</p>}
 
           {!loading && !error && listings.length === 0 && (
-            <p className="py-10 text-center text-slate-500">
-              No {mode === 'vendor_service' ? 'food trucks' : 'event gigs'} found yet.
-              {mode === 'host_gig' ? ' Check back soon!' : ' Be the first to post one!'}
-            </p>
+            <div className="py-16 text-center">
+              <div className="mb-4 text-5xl">📭</div>
+              <p className="text-slate-500 dark:text-slate-400">
+                No {mode === 'vendor_service' ? 'food trucks' : 'event gigs'} found.
+              </p>
+              <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
+                Try adjusting your filters — or be the first to post one!
+              </p>
+            </div>
           )}
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
