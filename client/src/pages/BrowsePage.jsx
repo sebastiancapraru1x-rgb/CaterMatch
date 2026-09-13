@@ -56,7 +56,7 @@ export default function BrowsePage() {
   const selectedCat = CATEGORIES.find((c) => c.value === category) || CATEGORIES[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
       <Header mode={mode} />
 
       <main className="mx-auto max-w-5xl px-4 py-6">
