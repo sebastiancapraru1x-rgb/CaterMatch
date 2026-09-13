@@ -89,6 +89,17 @@ const DEMO_LISTINGS = [
 ];
 
 async function autoSeed(database) {
+  // 🚫 Fake/demo data NEVER seeds in production — the public marketplace
+  // starts empty so real users see only real listings.
+  // Control: NODE_ENV=production  → off (default for prod)
+  //          SEED_DEMO_DATA=false → force off anywhere
+  //          SEED_DEMO_DATA=true  → force on (local demo/testing only)
+  const isProd = (process.env.NODE_ENV || '').toLowerCase() === 'production';
+  const seedDemo = (process.env.SEED_DEMO_DATA || (isProd ? 'false' : 'true')).toLowerCase() === 'true';
+  if (!seedDemo) {
+    console.log('🌱 Demo seed skipped — marketplace starts empty (production or SEED_DEMO_DATA=false).');
+    return;
+  }
   try {
     const chk = await database.query('SELECT COUNT(*)::int AS n FROM users');
     if (chk.rows[0]?.n > 0) return; // already has data

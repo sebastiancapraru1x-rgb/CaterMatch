@@ -7,6 +7,13 @@ import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { query, ensureDb, shutdownDb } from '../src/config/db.js';
 
+// 🚫 Never seed demo data in production — the public site must only show
+// real listings from real users. Override ONLY for local testing.
+if ((process.env.NODE_ENV || '').toLowerCase() === 'production' && process.env.SEED_DEMO_DATA !== 'true') {
+  console.error('🚫 Refusing to seed demo data in production (set SEED_DEMO_DATA=true to force — not recommended).');
+  process.exit(1);
+}
+
 const password = await bcrypt.hash('password123', 10);
 
 const users = [

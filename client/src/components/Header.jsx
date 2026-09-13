@@ -94,7 +94,7 @@ export default function Header({ mode }) {
         </nav>
       </div>
 
-      {/* Hamburger dropdown — aligned left to match button */}\
+      {/* Hamburger dropdown — aligned left to match button */}
       {menuOpen && user && (
         <div className="absolute top-14 left-4 z-20 w-56 rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
           <div className="p-2">
