@@ -44,6 +44,8 @@ const MIGRATIONS = [
      added_by VARCHAR(255),
      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
    )`,
+  // Vendor dollar price (replaces the $-$$$$ tier as the primary price).
+  `ALTER TABLE listings ADD COLUMN IF NOT EXISTS price_amount NUMERIC(10, 2)`,
 ];
 
 async function runMigrations(database) {

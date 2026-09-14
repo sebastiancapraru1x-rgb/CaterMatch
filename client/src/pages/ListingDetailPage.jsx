@@ -89,11 +89,15 @@ export default function ListingDetailPage() {
                 {listing.category} · posted by <span className="font-semibold">{listing.owner_name}</span>
               </p>
             </div>
-            {isVendor && listing.price_tier && (
+            {isVendor && (listing.price_amount != null ? (
+              <span className="rounded-lg bg-slate-100 px-3 py-1 text-lg font-bold text-slate-700">
+                From ${Number(listing.price_amount).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </span>
+            ) : listing.price_tier ? (
               <span className="rounded-lg bg-slate-100 px-3 py-1 text-lg font-bold text-slate-700">
                 {listing.price_tier}
               </span>
-            )}
+            ) : null)}
           </div>
 
           <p className="text-slate-700">{listing.description}</p>

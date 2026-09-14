@@ -54,6 +54,7 @@ CREATE TABLE listings (
 
     -- Vendor Fields (Nullable)
     price_tier price_tier_enum DEFAULT '$$',
+    price_amount NUMERIC(10, 2), -- dollar price (primary; starting at $)
     photos TEXT[] DEFAULT '{}',
 
     -- Boost System

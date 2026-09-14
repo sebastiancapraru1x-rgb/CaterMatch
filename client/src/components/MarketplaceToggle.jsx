@@ -1,7 +1,7 @@
 import { Truck, CalendarDays } from 'lucide-react';
 
 const MODES = [
-  { key: 'vendor_service', label: 'Browse Food Trucks', icon: Truck },
+  { key: 'vendor_service', label: 'Catering & Food Vendors', icon: Truck },
   { key: 'host_gig', label: 'Browse Event Gigs', icon: CalendarDays },
 ];
 

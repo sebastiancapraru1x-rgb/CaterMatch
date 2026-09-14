@@ -67,7 +67,7 @@ export default function BoostPage() {
         Pin your listing to the top of search results in your area, with a <b>Featured</b> badge. No commissions — ever.
       </p>
       <p className="mb-6 rounded-lg bg-orange-50 p-3 text-sm text-orange-800">
-        🚚 <b>Food trucks</b> boost to win more gigs. 🎪 <b>Event hosts</b> boost when you need caterers <b>fast</b> (urgent date, last-minute guest count) — matches the "Urgent / ASAP" urgency of an event gig.
+        🚚 <b>Caterers & food vendors</b> boost to win more gigs. 🎪 <b>Event hosts</b> boost when you need catering <b>fast</b> (urgent date, last-minute guest count).
       </p>
 
       {/* Stripe payment mode indicator — staff/dev only */}

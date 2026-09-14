@@ -11,7 +11,7 @@ const LISTING_FIELDS = `
   l.city, l.state_province, l.postal_code,
   l.latitude, l.longitude, l.service_radius_km,
   l.event_date, l.expected_guests, l.budget_estimate,
-  l.price_tier, l.photos,
+  l.price_tier, l.price_amount, l.photos,
   l.is_boosted, l.boost_expires_at, l.status, l.created_at, l.updated_at,
   u.full_name AS owner_name, u.avatar_url AS owner_avatar`;
 
@@ -111,7 +111,7 @@ export async function createListing(req, res, next) {
       city, state_province, postal_code,
       latitude, longitude, service_radius_km,
       event_date, expected_guests, budget_estimate,
-      price_tier, photos,
+      price_tier, price_amount, photos,
     } = req.body;
 
     if (!['vendor_service', 'host_gig'].includes(listing_type)) {
@@ -131,21 +131,25 @@ export async function createListing(req, res, next) {
       : 50;
 
     const allowedTiers = ['$', '$$', '$$$', '$$$$'];
-    const tier = allowedTiers.includes(price_tier) ? price_tier : '$$';
+    const tier = allowedTiers.includes(price_tier) ? price_tier : null;
+
+    // Dollar price (vendor "starting at" amount) — primary price field.
+    const priceNum = Number(price_amount);
+    const amount = Number.isFinite(priceNum) && priceNum >= 0 ? priceNum : null;
 
     const rows = await query(
       `INSERT INTO listings
          (user_id, listing_type, title, description, category,
           city, state_province, postal_code, latitude, longitude, service_radius_km,
-          event_date, expected_guests, budget_estimate, price_tier, photos)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+          event_date, expected_guests, budget_estimate, price_tier, price_amount, photos)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
        RETURNING id`,
       [
         req.user.id, listing_type, title.trim(), description.trim(), category,
         city.trim(), state_province.trim(), postal_code || null,
         latN, lngN, radius,
         event_date || null, expected_guests || null, budget_estimate || null,
-        tier, Array.isArray(photos) ? photos : [],
+        tier, amount, Array.isArray(photos) ? photos : [],
       ]
     );
 
@@ -165,7 +169,7 @@ export async function updateListing(req, res, next) {
     const allowed = new Set([
       'title', 'description', 'category', 'city', 'state_province', 'postal_code',
       'latitude', 'longitude', 'service_radius_km',
-      'event_date', 'expected_guests', 'budget_estimate', 'price_tier', 'photos',
+      'event_date', 'expected_guests', 'budget_estimate', 'price_tier', 'price_amount', 'photos',
     ]);
 
     const sets = [];

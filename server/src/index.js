@@ -33,7 +33,7 @@ app.post('/api/boosts/stripe/webhook', express.raw({ type: '*/*' }), async (req,
   }
 });
 
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ---- Health check ----

@@ -5,6 +5,13 @@ function money(n) {
   return n == null ? null : '$' + Number(n).toFixed(2);
 }
 
+function fmtPrice(listing) {
+  if (listing.price_amount != null && !isNaN(listing.price_amount)) {
+    return `From $${Number(listing.price_amount).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+  }
+  return listing.price_tier || null;
+}
+
 export default function ListingCard({ listing }) {
   const isVendor = listing.listing_type === 'vendor_service';
   const isBoosted = listing.is_boosted && new Date(listing.boost_expires_at) > new Date();
@@ -35,8 +42,8 @@ export default function ListingCard({ listing }) {
           <h3 className="line-clamp-2 font-bold text-slate-900 group-hover:text-brand-600">
             {listing.title}
           </h3>
-          {isVendor && listing.price_tier && (
-            <span className="shrink-0 text-sm font-bold text-slate-500">{listing.price_tier}</span>
+          {isVendor && fmtPrice(listing) && (
+            <span className="shrink-0 text-sm font-bold text-slate-500">{fmtPrice(listing)}</span>
           )}
         </div>
 

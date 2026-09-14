@@ -68,11 +68,11 @@ export default function BrowsePage() {
             </p>
             <h1 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-slate-100">
               {mode === 'vendor_service'
-                ? 'Book the best food trucks near you'
+                ? 'Book catering, food trucks & home cooks'
                 : 'Find your next event gig'}
             </h1>
             <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-              100% free — talk directly to {mode === 'vendor_service' ? 'vendors' : 'hosts'}. No commissions, ever.
+              Talk directly to {mode === 'vendor_service' ? 'vendors' : 'hosts'} — no commissions, ever.
             </p>
             <div className="mt-5">
               <MarketplaceToggle mode={mode} onChange={setMode} />
@@ -124,7 +124,7 @@ export default function BrowsePage() {
           <div className="mb-4 flex items-center gap-2">
             <h1 className="text-xl font-extrabold text-slate-900 sm:text-2xl dark:text-slate-100">
               {mode === 'vendor_service' ? (
-                <span className="inline-flex items-center gap-2"><Truck className="h-5 w-5 text-brand-600" /> Food trucks near you</span>
+                <span className="inline-flex items-center gap-2"><Truck className="h-5 w-5 text-brand-600" /> Catering & food vendors near you</span>
               ) : (
                 <span className="inline-flex items-center gap-2"><CalendarDays className="h-5 w-5 text-brand-600" /> Event gigs near you</span>
               )}
@@ -143,7 +143,7 @@ export default function BrowsePage() {
                 <SearchX className="h-8 w-8 text-slate-400" />
               </span>
               <p className="text-slate-500 dark:text-slate-400">
-                No {mode === 'vendor_service' ? 'food trucks' : 'event gigs'} found.
+                No {mode === 'vendor_service' ? 'vendors' : 'event gigs'} found.
               </p>
               <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
                 Try adjusting your filters — or be the first to post one!
