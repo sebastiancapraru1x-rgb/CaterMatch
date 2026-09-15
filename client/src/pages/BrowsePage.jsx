@@ -71,9 +71,6 @@ export default function BrowsePage() {
                 ? 'Book catering, food trucks & home cooks'
                 : 'Find your next event gig'}
             </h1>
-            <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
-              Talk directly to {mode === 'vendor_service' ? 'vendors' : 'hosts'} — no commissions, ever.
-            </p>
             <div className="mt-5">
               <MarketplaceToggle mode={mode} onChange={setMode} />
             </div>
