@@ -2,13 +2,13 @@ import { MapPin } from 'lucide-react';
 
 export default function RadiusPicker({ radius, onChange, options = [10, 25, 50, 100] }) {
   return (
-    <label className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm">
+    <label className="flex shrink-0 items-center gap-2 rounded-xl border border-slate-200/80 bg-white px-3 py-2 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800">
       <MapPin className="h-4 w-4 text-slate-400" />
-      <span className="font-medium text-slate-600">Radius</span>
+      <span className="font-medium text-slate-600 dark:text-slate-400">Radius</span>
       <select
         value={radius}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="text-sm font-semibold text-slate-800 focus:outline-none"
+        className="text-sm font-semibold text-slate-800 focus:outline-none dark:bg-slate-800 dark:text-slate-200"
       >
         {options.map((r) => (
           <option key={r} value={r}>{r} km</option>

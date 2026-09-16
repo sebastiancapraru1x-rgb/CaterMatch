@@ -31,12 +31,17 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-[#FAFAF8] to-slate-100 px-4 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <div className="card w-full max-w-md p-8">
-        <h1 className="mb-1 text-2xl font-extrabold text-slate-900">CaterMatch</h1>
-        <p className="mb-6 text-sm text-slate-500">
-          {isRegister ? 'Create your free account' : 'Welcome back — log in'}
-        </p>
+        <div className="mb-6 flex flex-col items-center gap-4 text-center">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-2xl shadow-soft dark:from-brand-600 dark:to-brand-800">
+            🚚
+          </span>
+          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">CaterMatch</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            {isRegister ? 'Create your free account' : 'Welcome back — log in'}
+          </p>
+        </div>
 
         <form onSubmit={submit} className="space-y-4">
           {isRegister && (
@@ -94,7 +99,7 @@ export default function AuthPage() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-lg bg-brand-600 px-4 py-2 font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
+            className="w-full rounded-xl bg-brand-600 px-4 py-2.5 font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60"
           >
             {busy ? 'Please wait…' : isRegister ? 'Create account' : 'Log in'}
           </button>

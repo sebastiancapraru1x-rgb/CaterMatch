@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Truck, CalendarDays, SlidersHorizontal, SearchX } from 'lucide-react';
+import { Truck, CalendarDays, SlidersHorizontal, SearchX, Search } from 'lucide-react';
 import api from '../services/api';
 import MarketplaceToggle from '../components/MarketplaceToggle';
 import RadiusPicker from '../components/RadiusPicker';
@@ -29,6 +29,7 @@ export default function BrowsePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [catOpen, setCatOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
   const fetchListings = useCallback(async () => {
     setLoading(true);
@@ -39,6 +40,7 @@ export default function BrowsePage() {
           type: mode,
           radius,
           category: category === 'all' ? undefined : category,
+          search: search.trim() || undefined,
         },
       });
       setListings(res.data.listings || []);
@@ -47,7 +49,7 @@ export default function BrowsePage() {
     } finally {
       setLoading(false);
     }
-  }, [mode, radius, category]);
+  }, [mode, radius, category, search]);
 
   useEffect(() => {
     fetchListings();
@@ -61,12 +63,12 @@ export default function BrowsePage() {
 
       <main className="mx-auto max-w-5xl px-4 py-6">
         {/* Hero */}
-        <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-50 via-orange-50 to-amber-50 shadow-sm ring-1 ring-orange-200/60 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950">
+        <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-50 via-orange-100/70 to-amber-100/50 shadow-soft ring-1 ring-brand-200/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950">
           <div className="px-5 py-6 sm:px-8 sm:py-8">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-orange-500/90 dark:text-orange-400/80">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-600/90 dark:text-brand-400/80">
               The open marketplace
             </p>
-            <h1 className="mt-1 text-2xl font-extrabold text-slate-900 sm:text-3xl dark:text-slate-100">
+            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-100">
               {mode === 'vendor_service'
                 ? 'Book catering, food trucks & home cooks'
                 : 'Find your next event gig'}
@@ -78,20 +80,28 @@ export default function BrowsePage() {
         </section>
 
         {/* Filters */}
-        <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-3 shadow-md ring-1 ring-slate-200 dark:border-slate-700 dark:bg-slate-900 sm:flex sm:items-center sm:gap-3 sm:p-4">
-          <RadiusPicker radius={radius} onChange={setRadius} options={RADIUS_OPTIONS} />
+        <div className="mt-5 rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft dark:border-slate-700 dark:bg-slate-900 sm:flex sm:items-center sm:gap-3 sm:p-4">
+          <div className="relative min-w-0 flex-1 sm:flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={`Search ${mode === 'vendor_service' ? 'vendors' : 'events'}…`}
+              className="w-full rounded-xl border border-slate-300 py-2 pl-9 pr-3 text-sm focus:border-brand-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+            />
+          </div>
 
-          <div className="relative mt-2 sm:mt-0 sm:flex-1">
+          <div className="relative mt-2 sm:mt-0">
             <button
               onClick={() => setCatOpen(!catOpen)}
-              className="flex w-full items-center justify-between rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:border-brand-400 dark:border-slate-600 dark:text-slate-300"
+              className="flex w-full items-center justify-between rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-700 hover:border-brand-400 dark:border-slate-600 dark:text-slate-300"
             >
               <span>{selectedCat.label}</span>
               <SlidersHorizontal className="h-4 w-4 text-slate-400" />
             </button>
 
             {catOpen && (
-              <div className="absolute top-full left-0 mt-1 w-full max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800 z-10">
+              <div className="absolute top-full left-0 z-10 mt-1 w-full max-h-60 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
                 {CATEGORIES.map((c) => (
                   <button
                     key={c.value}
@@ -109,11 +119,13 @@ export default function BrowsePage() {
             )}
           </div>
 
+          <RadiusPicker radius={radius} onChange={setRadius} options={RADIUS_OPTIONS} />
+
           <button
             onClick={fetchListings}
-            className="mt-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 sm:mt-0"
+            className="mt-2 flex h-[38px] shrink-0 items-center rounded-xl bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700 sm:mt-0"
           >
-            Refresh
+            Apply
           </button>
         </div>
 
@@ -154,6 +166,22 @@ export default function BrowsePage() {
             ))}
           </div>
         </section>
+
+        {/* Footer */}
+        <footer className="mt-16 border-t border-slate-200/70 py-10 dark:border-slate-800">
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <span className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
+              <span className="text-xl leading-none">🚚</span>
+              <span>CaterMatch</span>
+            </span>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              The open marketplace for catering, food vendors & event hosts.
+            </p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              © {new Date().getFullYear()} CaterMatch
+            </p>
+          </div>
+        </footer>
       </main>
     </div>
   );

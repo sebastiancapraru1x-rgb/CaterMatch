@@ -28,8 +28,8 @@ export default function Header({ mode }) {
   }
 
   return (
-    <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 dark:border-slate-700 dark:bg-slate-900/95 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+    <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 dark:border-slate-700/70 dark:bg-slate-900/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <div className="flex items-center gap-3">
           {user && (
             <div className="relative">
@@ -62,52 +62,59 @@ export default function Header({ mode }) {
               )}
             </div>
           )}
-          <Link to="/" className="flex items-center gap-2 text-xl font-extrabold text-brand-600 dark:text-brand-400">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-amber-600">🚚 CaterMatch</span>
+          <Link to="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
+            <span className="text-xl leading-none">🚚</span>
+            <span>CaterMatch</span>
           </Link>
         </div>
 
-        <nav className="flex items-center gap-3">
+        <nav className="flex items-center gap-2.5">
           {user ? (
             <>
               {isStaff && (
                 <Link
                   to="/admin"
-                  className="hidden items-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300 md:flex"
+                  className="hidden items-center gap-1 rounded-xl border border-amber-300/70 bg-amber-50/70 px-3 py-1.5 text-sm font-semibold text-amber-700 hover:bg-amber-100 md:flex dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
                 >
                   Dev Tab
                 </Link>
               )}
               <Link
                 to="/listings/new"
-                className="flex items-center gap-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+                className="flex items-center gap-1.5 rounded-xl bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 hover:shadow-soft dark:bg-brand-500"
               >
                 <PlusCircle className="h-4 w-4" /> Post
               </Link>
-              <Link to="/messages" className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800" title="Messages">
-                <MessageSquare className="h-4 w-4" /> Messages
+              <Link
+                to="/messages"
+                title="Messages"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 px-3 py-2 text-sm text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+              >
+                <MessageSquare className="h-4 w-4" /> <span className="hidden md:inline">Messages</span>
               </Link>
               <button
                 onClick={toggleDark}
-                className="rounded-lg p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 title={dark ? "Switch to light mode" : "Switch to dark mode"}
+                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               >
-                {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {dark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
               </button>
-              <span className="hidden text-sm text-slate-600 dark:text-slate-300 sm:inline">{user.full_name}</span>
+              <span className="hidden items-center rounded-full border border-slate-200/80 bg-slate-100/70 px-2.5 py-1 text-xs font-semibold text-slate-600 sm:inline-flex dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                {user.full_name}
+              </span>
             </>
           ) : (
             <>
               <button
                 onClick={toggleDark}
-                className="rounded-lg p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 title={dark ? "Switch to light mode" : "Switch to dark mode"}
+                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               >
-                {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                {dark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
               </button>
               <Link
                 to="/auth"
-                className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
               >
                 <LogIn className="h-4 w-4" /> Login
               </Link>
