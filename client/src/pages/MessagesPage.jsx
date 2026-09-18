@@ -70,7 +70,7 @@ export default function MessagesPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="flex items-center gap-2 text-2xl font-extrabold text-slate-900">
+        <h1 className="flex items-center gap-2 text-2xl font-extrabold text-slate-900 dark:text-white">
           <MessageSquare className="h-6 w-6 text-brand-600" /> Messages
         </h1>
         <button onClick={load} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50">
@@ -104,7 +104,7 @@ export default function MessagesPage() {
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className="truncate text-sm font-semibold text-slate-900">{c.listing_title}</p>
+                  <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">{c.listing_title}</p>
                   {c.unread_count > 0 && (
                     <span className="rounded-full bg-brand-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
                       {c.unread_count}

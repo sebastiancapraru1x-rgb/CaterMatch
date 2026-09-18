@@ -83,7 +83,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
           <ArrowLeft className="h-5 w-5" />
         </button>
         <MessageSquare className="h-5 w-5 text-brand-600" />
-        <h2 className="font-semibold text-slate-900">Chat</h2>
+        <h2 className="font-semibold text-slate-900 dark:text-slate-100">Chat</h2>
       </div>
 
       {/* Messages */}

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { TruckMark, EventMark } from '../components/BrandMarks';
 
 function money(n) {
   return n == null ? null : `$${Number(n).toFixed(2)}`;
@@ -69,8 +70,8 @@ export default function ListingDetailPage() {
           {listing.photos?.length > 0 ? (
             <img src={listing.photos[0]} alt={listing.title} className="h-full w-full object-cover object-center" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-100 to-amber-50">
-              <span className="text-7xl">{isVendor ? '🚚' : '🎪'}</span>
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-100 to-amber-100 text-slate-300 dark:from-slate-800 dark:to-slate-800 dark:text-slate-600">
+              {isVendor ? <TruckMark className="h-16 w-16" /> : <EventMark className="h-16 w-16" />}
             </div>
           )}
 
@@ -84,25 +85,21 @@ export default function ListingDetailPage() {
         <div className="space-y-4 p-6">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-extrabold text-slate-900">{listing.title}</h1>
-              <p className="text-sm text-slate-500">
+              <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">{listing.title}</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 {listing.category} · posted by <span className="font-semibold">{listing.owner_name}</span>
               </p>
             </div>
-            {isVendor && (listing.price_amount != null ? (
-              <span className="rounded-lg bg-slate-100 px-3 py-1 text-lg font-bold text-slate-700">
+            {isVendor && listing.price_amount != null && (
+              <span className="rounded-lg bg-brand-50 px-3 py-1 text-lg font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
                 From ${Number(listing.price_amount).toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </span>
-            ) : listing.price_tier ? (
-              <span className="rounded-lg bg-slate-100 px-3 py-1 text-lg font-bold text-slate-700">
-                {listing.price_tier}
-              </span>
-            ) : null)}
+            )}
           </div>
 
-          <p className="text-slate-700">{listing.description}</p>
+          <p className="text-slate-700 dark:text-slate-300">{listing.description}</p>
 
-          <div className="grid gap-2 rounded-xl bg-slate-50 p-4 text-sm text-slate-700 sm:grid-cols-2">
+          <div className="grid gap-2 rounded-xl bg-slate-50 p-4 text-sm text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 sm:grid-cols-2">
             <span className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-brand-600" />
               {listing.city}, {listing.state_province}
@@ -127,17 +124,17 @@ export default function ListingDetailPage() {
             )}
           </div>
 
-          <div className="rounded-xl bg-slate-50 p-4">
+          <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-800/60">
             {isOwner ? (
               <div className="space-y-3">
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-slate-400">
                   This is your listing. Interested parties can message you directly.
                 </p>
                 {isBoosted ? (
-                  <p className="flex items-center gap-1 text-sm font-semibold text-brand-600">
+                  <p className="flex items-center gap-1 text-sm font-semibold text-brand-600 dark:text-brand-400">
                     <Star className="h-4 w-4 fill-current" /> Featured
                     {listing.boost_expires_at && (
-                      <span className="font-normal text-slate-500">
+                      <span className="font-normal text-slate-500 dark:text-slate-400">
                         · until {new Date(listing.boost_expires_at).toLocaleDateString()}
                       </span>
                     )}
@@ -145,7 +142,7 @@ export default function ListingDetailPage() {
                 ) : (
                   <Link
                     to={`/boost?listing_id=${listing.id}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50 transition"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50 transition dark:border-brand-500 dark:bg-slate-900 dark:text-brand-300 dark:hover:bg-slate-800"
                   >
                     <Sparkles className="h-5 w-5" /> Boost this listing
                   </Link>

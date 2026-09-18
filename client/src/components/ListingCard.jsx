@@ -1,5 +1,6 @@
 import { MapPin, Users, CalendarDays, Wallet, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { TruckMark, EventMark } from './BrandMarks';
 
 function money(n) {
   return n == null ? null : '$' + Number(n).toFixed(2);
@@ -9,7 +10,7 @@ function fmtPrice(listing) {
   if (listing.price_amount != null && !isNaN(listing.price_amount)) {
     return `From $${Number(listing.price_amount).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
   }
-  return listing.price_tier || null;
+  return null;
 }
 
 export default function ListingCard({ listing }) {
@@ -36,15 +37,15 @@ export default function ListingCard({ listing }) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-4xl">
-            {isVendor ? '🚚' : '🎪'}
+          <div className="flex h-full w-full items-center justify-center text-slate-300 dark:text-slate-600">
+            {isVendor ? <TruckMark className="h-10 w-10" /> : <EventMark className="h-10 w-10" />}
           </div>
         )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="line-clamp-2 font-bold tracking-tight text-slate-900 group-hover:text-brand-600">
+          <h3 className="line-clamp-2 font-bold tracking-tight text-slate-900 group-hover:text-brand-600 dark:text-slate-100 dark:group-hover:text-brand-400">
             {listing.title}
           </h3>
           {isVendor && fmtPrice(listing) && (

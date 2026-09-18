@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Sparkles, ArrowLeft, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { Sparkles, ArrowLeft, CheckCircle2, ShieldCheck, Zap, Truck, CalendarDays } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -60,14 +60,14 @@ export default function BoostPage() {
         <ArrowLeft className="h-4 w-4" /> Back
       </Link>
 
-      <h1 className="mb-2 flex items-center gap-2 text-2xl font-extrabold text-slate-900">
+      <h1 className="mb-2 flex items-center gap-2 text-2xl font-extrabold text-slate-900 dark:text-white">
         <Sparkles className="h-6 w-6 text-brand-600" /> Boost your listing
       </h1>
       <p className="mb-2 text-sm text-slate-500">
         Pin your listing to the top of search results in your area, with a <b>Featured</b> badge. No commissions — ever.
       </p>
       <p className="mb-6 rounded-lg bg-orange-50 p-3 text-sm text-orange-800">
-        🚚 <b>Caterers & food vendors</b> boost to win more gigs. 🎪 <b>Event hosts</b> boost when you need catering <b>fast</b> (urgent date, last-minute guest count).
+        <Truck className="mr-1 inline h-4 w-4" /> <b>Caterers & food vendors</b> boost to win more gigs. <CalendarDays className="mr-1 ml-2 inline h-4 w-4" /> <b>Event hosts</b> boost when you need catering <b>fast</b> (urgent date, last-minute guest count).
       </p>
 
       {/* Stripe payment mode indicator — staff/dev only */}
@@ -127,7 +127,7 @@ export default function BoostPage() {
                 >
                   {myListings.map((l) => (
                     <option key={l.id} value={l.id}>
-                      {l.listing_type === 'host_gig' ? '🎪' : '🚚'} {l.title}
+                      {l.listing_type === 'host_gig' ? '[Event]' : '[Vendor]'} {l.title}
                     </option>
                   ))}
                 </select>
@@ -142,7 +142,7 @@ export default function BoostPage() {
           <div className="grid gap-4 sm:grid-cols-3">
             {tiers.map((t) => (
               <div key={t.days} className="card flex flex-col p-5">
-                <h3 className="font-bold text-slate-900">{t.label}</h3>
+                <h3 className="font-bold text-slate-900 dark:text-slate-100">{t.label}</h3>
                 <p className="mt-2 text-3xl font-extrabold text-brand-600">${t.amount.toFixed(2)}</p>
                 <p className="mt-1 text-xs text-slate-500">one-time · you keep your earnings</p>
                 <button

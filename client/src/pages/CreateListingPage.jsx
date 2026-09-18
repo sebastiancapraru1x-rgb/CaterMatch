@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ImagePlus, X, Loader2 } from 'lucide-react';
+import { ImagePlus, X, Loader2, Truck, CalendarDays } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -106,7 +106,7 @@ export default function CreateListingPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-2 text-2xl font-extrabold text-slate-900">Post a listing</h1>
+      <h1 className="mb-2 text-2xl font-extrabold text-slate-900 dark:text-white">Post a listing</h1>
       <p className="mb-6 text-sm text-slate-500">
         Caterers, food trucks, and home cooks — connect directly with hosts near you.
       </p>
@@ -115,15 +115,15 @@ export default function CreateListingPage() {
       <div className="mb-6 grid grid-cols-2 gap-2 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200">
         <button
           onClick={() => setType('vendor_service')}
-          className={`rounded-lg px-3 py-3 text-sm font-semibold ${type === 'vendor_service' ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-orange-50'}`}
+          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold ${type === 'vendor_service' ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-orange-50'}`}
         >
-          🚚 I'm a vendor (offer food service)
+          <Truck className="h-4 w-4" /> I'm a vendor (offer food service)
         </button>
         <button
           onClick={() => setType('host_gig')}
-          className={`rounded-lg px-3 py-3 text-sm font-semibold ${type === 'host_gig' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-orange-50'}`}
+          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold ${type === 'host_gig' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-orange-50'}`}
         >
-          🎪 I'm a host (need catering)
+          <CalendarDays className="h-4 w-4" /> I'm a host (need catering)
         </button>
       </div>
 
@@ -185,6 +185,7 @@ export default function CreateListingPage() {
                   type="number"
                   min="0"
                   step="1"
+                  required
                   value={form.price_amount}
                   onChange={set('price_amount')}
                   placeholder="e.g. 75"
@@ -209,7 +210,7 @@ export default function CreateListingPage() {
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">Budget ($)</label>
-                <input type="number" value={form.budget_estimate} onChange={set('budget_estimate')} className="w-full rounded-lg border border-slate-300 px-3 py-2" />
+                <input type="number" min="0" step="1" required value={form.budget_estimate} onChange={set('budget_estimate')} className="w-full rounded-lg border border-slate-300 px-3 py-2" />
               </div>
             </div>
           </>

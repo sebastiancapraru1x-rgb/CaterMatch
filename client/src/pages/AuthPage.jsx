@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { TruckMark } from '../components/BrandMarks';
 
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(false);
@@ -34,8 +35,8 @@ export default function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-[#FAFAF8] to-slate-100 px-4 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <div className="card w-full max-w-md p-8">
         <div className="mb-6 flex flex-col items-center gap-4 text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-2xl shadow-soft dark:from-brand-600 dark:to-brand-800">
-            🚚
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-brand-50 shadow-soft dark:from-brand-600 dark:to-brand-800">
+            <TruckMark className="h-7 w-7" />
           </span>
           <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">CaterMatch</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">

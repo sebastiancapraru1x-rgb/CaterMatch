@@ -53,7 +53,7 @@ const listings = [
     category: 'Tacos',
     city: 'Toronto', state_province: 'Ontario', postal_code: 'M5V2T6',
     latitude: 43.6532, longitude: -79.3832, service_radius_km: 50,
-    price_tier: '$$', photos: [],
+    price_tier: '$$', price_amount: 85, photos: [],
     event_date: null, expected_guests: null, budget_estimate: null,
   },
   {
@@ -78,11 +78,11 @@ for (const l of listings) {
   await query(
     `INSERT INTO listings
        (user_id, listing_type, title, description, category, city, state_province, postal_code,
-        latitude, longitude, service_radius_km, price_tier, event_date, expected_guests, budget_estimate, photos)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
+        latitude, longitude, service_radius_km, price_tier, price_amount, event_date, expected_guests, budget_estimate, photos)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)`,
     [l.user_id, l.listing_type, l.title, l.description, l.category, l.city,
       l.state_province, l.postal_code, l.latitude, l.longitude, l.service_radius_km,
-      l.price_tier, l.event_date, l.expected_guests, l.budget_estimate, l.photos]
+      l.price_tier, l.price_amount, l.event_date, l.expected_guests, l.budget_estimate, l.photos]
   );
   console.log('✓ listing seeded:', l.title);
 }

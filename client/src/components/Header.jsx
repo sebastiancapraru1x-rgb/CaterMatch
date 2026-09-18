@@ -2,6 +2,7 @@ import { Menu, PlusCircle, LogIn, LogOut, MessageSquare, User, Settings, Moon, S
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { TruckMark } from './BrandMarks';
 
 export default function Header({ mode }) {
   const { user, logout, isStaff } = useAuth();
@@ -63,7 +64,7 @@ export default function Header({ mode }) {
             </div>
           )}
           <Link to="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
-            <span className="text-xl leading-none">🚚</span>
+            <TruckMark className="h-6 w-6" />
             <span>CaterMatch</span>
           </Link>
         </div>

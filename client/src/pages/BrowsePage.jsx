@@ -5,6 +5,7 @@ import MarketplaceToggle from '../components/MarketplaceToggle';
 import RadiusPicker from '../components/RadiusPicker';
 import ListingCard from '../components/ListingCard';
 import Header from '../components/Header';
+import { TruckMark } from '../components/BrandMarks';
 
 const CATEGORIES = [
   { value: 'all', label: 'All Categories' },
@@ -171,7 +172,7 @@ export default function BrowsePage() {
         <footer className="mt-16 border-t border-slate-200/70 py-10 dark:border-slate-800">
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <span className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
-              <span className="text-xl leading-none">🚚</span>
+              <TruckMark className="h-6 w-6" />
               <span>CaterMatch</span>
             </span>
             <p className="text-sm text-slate-500 dark:text-slate-400">
