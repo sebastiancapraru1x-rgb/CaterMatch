@@ -25,7 +25,12 @@ export default function Header({ mode }) {
 
   function handleProfile() {
     setMenuOpen(false);
-    navigate('/auth');
+    navigate('/profile');
+  }
+
+  function handleSettings() {
+    setMenuOpen(false);
+    navigate('/profile?tab=preferences');
   }
 
   return (
@@ -36,7 +41,7 @@ export default function Header({ mode }) {
             <div className="relative">
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="rounded-lg p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                className="rounded-lg p-1.5 text-slate-600 transition hover:bg-sand-200 dark:text-slate-300 dark:hover:bg-slate-800"
                 aria-label="Menu"
               >
                 <Menu className="h-5 w-5" />
@@ -45,17 +50,20 @@ export default function Header({ mode }) {
                 <div className="absolute left-0 top-full z-20 mt-2 w-52 rounded-xl border border-sand-200 bg-sand-50 py-1.5 shadow-lg dark:border-slate-700 dark:bg-slate-800">
                   <button
                     onClick={handleProfile}
-                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-sand-200 dark:text-slate-200 dark:hover:bg-slate-700"
                   >
                     <User className="h-4 w-4" /> Profile
                   </button>
-                  <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700">
+                  <button
+                    onClick={handleSettings}
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-sand-200 dark:text-slate-200 dark:hover:bg-slate-700"
+                  >
                     <Settings className="h-4 w-4" /> Settings
                   </button>
                   <hr className="my-1 border-slate-200 dark:border-slate-700" />
                   <button
                     onClick={() => { logout(); setMenuOpen(false); navigate('/auth'); }}
-                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/30"
                   >
                     <LogOut className="h-4 w-4" /> Logout
                   </button>
@@ -89,18 +97,18 @@ export default function Header({ mode }) {
               <Link
                 to="/messages"
                 title="Messages"
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 px-3 py-2 text-sm text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                className="flex items-center gap-1.5 rounded-xl border border-sand-300 bg-sand-50 px-3 py-2 text-sm text-slate-600 transition hover:bg-sand-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
               >
                 <MessageSquare className="h-4 w-4" /> <span className="hidden md:inline">Messages</span>
               </Link>
               <button
                 onClick={toggleDark}
                 title={dark ? "Switch to light mode" : "Switch to dark mode"}
-                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-sand-200 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               >
                 {dark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
               </button>
-              <span className="hidden items-center rounded-full border border-slate-200/80 bg-slate-100/70 px-2.5 py-1 text-xs font-semibold text-slate-600 sm:inline-flex dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+              <span className="hidden items-center rounded-full border border-sand-300 bg-sand-200/70 px-2.5 py-1 text-xs font-semibold text-slate-600 sm:inline-flex dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                 {user.full_name}
               </span>
             </>
@@ -109,13 +117,13 @@ export default function Header({ mode }) {
               <button
                 onClick={toggleDark}
                 title={dark ? "Switch to light mode" : "Switch to dark mode"}
-                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                className="flex h-9 w-9 items-center justify-center rounded-xl text-slate-500 transition hover:bg-sand-200 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               >
                 {dark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
               </button>
               <Link
                 to="/auth"
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200/80 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                className="flex items-center gap-1.5 rounded-xl border border-sand-300 bg-sand-50 px-3.5 py-2 text-sm font-semibold text-slate-700 transition hover:bg-sand-100"
               >
                 <LogIn className="h-4 w-4" /> Login
               </Link>

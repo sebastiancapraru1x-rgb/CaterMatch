@@ -76,10 +76,10 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
   }
 
   return (
-    <div className="flex h-[70vh] flex-col rounded-xl border border-sand-200 bg-sand-50 shadow-sm">
+    <div className="flex h-[70vh] flex-col rounded-xl border border-sand-200 bg-sand-50 shadow-sm dark:border-slate-700 dark:bg-slate-900">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-3">
-        <button onClick={onBack} className="rounded-lg p-1 text-slate-500 hover:bg-slate-100 sm:hidden" aria-label="Back">
+      <div className="flex items-center gap-3 border-b border-sand-200 px-4 py-3 dark:border-slate-700">
+        <button onClick={onBack} className="rounded-lg p-1 text-slate-500 hover:bg-sand-200/60 dark:text-slate-400 dark:hover:bg-slate-800 sm:hidden" aria-label="Back">
           <ArrowLeft className="h-5 w-5" />
         </button>
         <MessageSquare className="h-5 w-5 text-brand-600" />
@@ -87,7 +87,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 space-y-3 overflow-y-auto bg-sand-100/70 p-4">
+      <div className="flex-1 space-y-3 overflow-y-auto bg-sand-100/70 p-4 dark:bg-slate-950/40">
         {loading && <p className="text-center text-sm text-slate-400">Loading messages…</p>}
         {!loading && error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>}
         {!loading && !error && messages.length === 0 && (
@@ -104,7 +104,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
                 className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
                   mine
                     ? 'bg-brand-600 text-white rounded-br-sm'
-                    : 'bg-white text-slate-800 rounded-bl-sm border border-slate-200'
+                    : 'bg-sand-50 text-slate-800 rounded-bl-sm border border-sand-200 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700'
                 }`}
               >
                 <p className="whitespace-pre-wrap break-words">{m.message_text}</p>
@@ -119,7 +119,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
       </div>
 
       {/* Input */}
-      <form onSubmit={send} className="flex items-center gap-2 border-t border-slate-200 p-3">
+      <form onSubmit={send} className="flex items-center gap-2 border-t border-sand-200 p-3 dark:border-slate-700">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}

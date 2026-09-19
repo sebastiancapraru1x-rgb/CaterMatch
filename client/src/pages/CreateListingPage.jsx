@@ -123,7 +123,7 @@ export default function CreateListingPage() {
         </button>
         <button
           onClick={() => setType('host_gig')}
-          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold ${type === 'host_gig' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-orange-50'}`}
+          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold ${type === 'host_gig' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-sand-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}
         >
           <CalendarDays className="h-4 w-4" /> I'm a host (need catering)
         </button>

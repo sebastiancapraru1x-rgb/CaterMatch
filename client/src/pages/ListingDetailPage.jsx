@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import BackButton from '../components/BackButton';
+import { fmtDate } from '../lib/format';
 import { useAuth } from '../context/AuthContext';
 import { TruckMark, EventMark } from '../components/BrandMarks';
 
@@ -108,7 +109,7 @@ export default function ListingDetailPage() {
             )}
             {!isVendor && listing.event_date && (
               <span className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-brand-600" /> {listing.event_date}
+                <CalendarDays className="h-4 w-4 text-brand-600" /> {fmtDate(listing.event_date)}
               </span>
             )}
             {!isVendor && listing.expected_guests && (

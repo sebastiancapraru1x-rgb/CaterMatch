@@ -59,7 +59,7 @@ export default function BrowsePage() {
   const selectedCat = CATEGORIES.find((c) => c.value === category) || CATEGORIES[0];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="min-h-screen bg-sand-100 dark:bg-slate-950">
       <Header mode={mode} />
 
       <main className="mx-auto max-w-5xl px-4 py-6">
@@ -83,7 +83,7 @@ export default function BrowsePage() {
         </section>
 
         {/* Filters */}
-        <div className="mt-5 rounded-2xl border border-slate-200/80 bg-white p-3 shadow-soft dark:border-slate-700 dark:bg-slate-900 sm:flex sm:items-center sm:gap-3 sm:p-4">
+        <div className="mt-5 rounded-2xl border border-sand-200 bg-sand-50 p-3 shadow-soft dark:border-slate-700 dark:bg-slate-900 sm:flex sm:items-center sm:gap-3 sm:p-4">
           <div className="relative min-w-0 flex-1 sm:flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
@@ -104,7 +104,7 @@ export default function BrowsePage() {
             </button>
 
             {catOpen && (
-              <div className="absolute top-full left-0 z-10 mt-1 w-full max-h-60 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
+              <div className="absolute top-full left-0 z-10 mt-1 w-full max-h-60 overflow-y-auto rounded-xl border border-sand-200 bg-sand-50 shadow-lg dark:border-slate-700 dark:bg-slate-800">
                 {CATEGORIES.map((c) => (
                   <button
                     key={c.value}
@@ -112,7 +112,7 @@ export default function BrowsePage() {
                     className={`block w-full px-3 py-2 text-left text-sm ${
                       category === c.value
                         ? 'bg-brand-50 font-semibold text-brand-700'
-                        : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700'
+                        : 'text-slate-700 hover:bg-sand-100 dark:text-slate-300 dark:hover:bg-slate-700'
                     }`}
                   >
                     {c.label}

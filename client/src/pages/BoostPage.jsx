@@ -93,7 +93,7 @@ export default function BoostPage() {
         </div>
       )}
       {isCanceled && (
-        <div className="mb-4 rounded-lg bg-slate-100 p-4 text-sm text-slate-700">
+        <div className="mb-4 rounded-lg border border-sand-200 bg-sand-100 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
           Payment canceled — no charge was made. You can try again anytime.
         </div>
       )}

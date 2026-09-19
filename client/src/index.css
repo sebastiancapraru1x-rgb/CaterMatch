@@ -17,7 +17,7 @@ body {
    white text on the browser's default white background = invisible typing.
    Give every input/select/textarea explicit bg + text colors for each mode.) */
 input, select, textarea {
-  @apply bg-white text-slate-900 placeholder:text-slate-400 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500;
+  @apply bg-sand-50 text-slate-900 placeholder:text-slate-400 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500;
 }
 html.dark {
   color-scheme: dark; /* native pickers (date etc.) render dark too */

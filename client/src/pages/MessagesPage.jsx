@@ -3,6 +3,7 @@ import { MessageSquare, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import BackButton from '../components/BackButton';
+import Header from '../components/Header';
 import { useAuth } from '../context/AuthContext';
 import { getSocket } from '../services/socket';
 import ChatWindow from '../components/ChatWindow';
@@ -69,13 +70,15 @@ export default function MessagesPage() {
   if (loading) return <p className="p-8 text-center text-slate-500">Loading messages…</p>;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <BackButton className="mb-4" />
+    <div className="min-h-screen bg-sand-100 dark:bg-slate-950">
+      <Header />
+      <div className="mx-auto max-w-6xl px-4 py-6">
+        <BackButton className="mb-4" />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="flex items-center gap-2 text-2xl font-extrabold text-slate-900 dark:text-white">
           <MessageSquare className="h-6 w-6 text-brand-600" /> Messages
         </h1>
-        <button onClick={load} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50">
+        <button onClick={load} className="flex items-center gap-1 rounded-lg border border-sand-300 bg-sand-50 px-3 py-1.5 text-sm text-slate-600 transition hover:bg-sand-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
           <RefreshCw className="h-4 w-4" /> Refresh
         </button>
       </div>
@@ -145,6 +148,7 @@ export default function MessagesPage() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

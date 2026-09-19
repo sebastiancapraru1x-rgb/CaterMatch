@@ -1,10 +1,7 @@
 import { MapPin, Users, CalendarDays, Wallet, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { TruckMark, EventMark } from './BrandMarks';
-
-function money(n) {
-  return n == null ? null : '$' + Number(n).toFixed(2);
-}
+import { fmtDate, fmtMoney } from '../lib/format';
 
 function fmtPrice(listing) {
   if (listing.price_amount != null && !isNaN(listing.price_amount)) {
@@ -64,7 +61,7 @@ export default function ListingCard({ listing }) {
           )}
           {!isVendor && listing.event_date && (
             <span className="flex items-center gap-1">
-              <CalendarDays className="h-3.5 w-3.5 text-slate-400" /> {listing.event_date}
+              <CalendarDays className="h-3.5 w-3.5 text-slate-400" /> {fmtDate(listing.event_date)}
             </span>
           )}
           {!isVendor && listing.expected_guests && (
@@ -76,7 +73,7 @@ export default function ListingCard({ listing }) {
 
         {!isVendor && listing.budget_estimate && (
           <span className="flex items-center gap-1.5 text-sm font-semibold text-brand-600 dark:text-brand-400">
-            <Wallet className="h-4 w-4" /> Budget {money(listing.budget_estimate)}
+            <Wallet className="h-4 w-4" /> Budget {fmtMoney(listing.budget_estimate)}
           </span>
         )}
 

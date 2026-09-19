@@ -19,12 +19,13 @@ export default {
           900: '#6C270F',
         },
         // Warm beige neutrals — page background & card surfaces.
+        // Light mode is intentionally BEIGE, never plain white.
         sand: {
-          50: '#FBF8F2', // card surface (warm cream)
-          100: '#F4EFE5', // page background (beige)
-          200: '#E9E0CF', // borders on beige
-          300: '#D9CBB2',
-          400: '#C4B394',
+          50: '#F8F2E6', // card surface (warm beige cream)
+          100: '#F0E7D6', // page background (beige)
+          200: '#E3D7C0', // borders on beige
+          300: '#D3C1A1',
+          400: '#BCA57F',
         },
       },
       fontFamily: {
