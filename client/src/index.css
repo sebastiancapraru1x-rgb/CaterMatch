@@ -12,6 +12,17 @@ body {
   @apply bg-[#FAFAF8] text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
 }
 
+/* Form controls: readable in both themes.
+   (Tailwind's reset makes inputs inherit text color — in dark mode that's
+   white text on the browser's default white background = invisible typing.
+   Give every input/select/textarea explicit bg + text colors for each mode.) */
+input, select, textarea {
+  @apply bg-white text-slate-900 placeholder:text-slate-400 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500;
+}
+html.dark {
+  color-scheme: dark; /* native pickers (date etc.) render dark too */
+}
+
 /* Soft focus ring for keyboard users + consistent focus everywhere */
 :focus-visible {
   outline: 2px solid #d95329;
