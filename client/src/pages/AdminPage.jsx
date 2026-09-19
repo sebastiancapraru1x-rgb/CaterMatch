@@ -67,15 +67,29 @@ export default function AdminPage() {
     <div className="mx-auto max-w-6xl px-4 py-8">
       <BackButton label="Back to browse" className="mb-4" />
 
-      <div className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-r from-brand-700 via-brand-600 to-brand-500 p-5 text-white shadow-brand-glow">
+      <div className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-r from-amber-600 via-amber-500 to-brand-600 p-5 text-white shadow-brand-glow">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)',
+            backgroundSize: '22px 22px',
+          }}
+        />
         <div className="pointer-events-none absolute -right-10 -top-14 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-        <div className="flex items-center gap-4">
+        <div className="pointer-events-none absolute -bottom-16 -left-8 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
+        <div className="relative flex items-center gap-4">
           <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
             <Settings className="h-6 w-6" />
           </span>
           <div>
-            <h1 className="text-2xl font-extrabold tracking-tight">Dev Panel</h1>
-            <p className="text-sm text-white/75">Internal tools — staff only.</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-extrabold tracking-tight">Dev Panel</h1>
+              <span className="rounded-full bg-black/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-white/20">
+                internal
+              </span>
+            </div>
+            <p className="text-sm text-white/80">Internal tools — staff only.</p>
           </div>
           <span className="ml-auto hidden items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold ring-1 ring-white/25 sm:inline-flex">
             <ShieldCheck className="h-3.5 w-3.5" /> {me.user.email}
@@ -112,7 +126,8 @@ export default function AdminPage() {
 
 function StatCard({ label, value, icon: Icon, accent }) {
   return (
-    <div className="rounded-2xl border border-sand-200 bg-sand-50 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lift dark:border-slate-700 dark:bg-slate-900">
+    <div className="group relative overflow-hidden rounded-2xl border border-sand-200 bg-sand-50 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lift dark:border-slate-700 dark:bg-slate-900">
+      <span className={`absolute inset-x-0 top-0 h-1 ${accent.replace('text-', 'bg-').split(' ')[0]} opacity-70 transition-opacity group-hover:opacity-100`} />
       <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${accent}`}>
         <Icon className="h-4.5 w-4.5" />
       </span>
