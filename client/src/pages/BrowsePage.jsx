@@ -64,8 +64,10 @@ export default function BrowsePage() {
 
       <main className="mx-auto max-w-5xl px-4 py-6">
         {/* Hero */}
-        <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-50 via-orange-100/70 to-amber-100/50 shadow-soft ring-1 ring-brand-200/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950">
-          <div className="px-5 py-6 sm:px-8 sm:py-8">
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-100/80 via-sand-50 to-amber-100/80 shadow-soft ring-1 ring-brand-200/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950">
+          <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-brand-400/20 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-28 -left-12 h-72 w-72 rounded-full bg-amber-300/30 blur-3xl" />
+          <div className="relative px-5 py-6 sm:px-8 sm:py-8">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-600/90 dark:text-brand-400/80">
               The open marketplace
             </p>
@@ -139,7 +141,7 @@ export default function BrowsePage() {
                 <span className="inline-flex items-center gap-2"><CalendarDays className="h-5 w-5 text-brand-600" /> Event gigs near you</span>
               )}
             </h1>
-            <span className="ml-auto rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-bold text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+            <span className="ml-auto rounded-full border border-sand-200 bg-sand-50 px-2.5 py-0.5 text-xs font-bold text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
               {listings.length} {listings.length === 1 ? 'result' : 'results'}
             </span>
           </div>
@@ -149,7 +151,7 @@ export default function BrowsePage() {
 
           {!loading && !error && listings.length === 0 && (
             <div className="py-16 text-center">
-              <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+              <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sand-200/70 dark:bg-slate-800">
                 <SearchX className="h-8 w-8 text-slate-400" />
               </span>
               <p className="text-slate-500 dark:text-slate-400">
@@ -169,7 +171,7 @@ export default function BrowsePage() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-16 border-t border-slate-200/70 py-10 dark:border-slate-800">
+        <footer className="mt-16 border-t border-sand-200 py-10 dark:border-slate-800">
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
             <span className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-brand-600 dark:text-brand-400">
               <TruckMark className="h-6 w-6" />

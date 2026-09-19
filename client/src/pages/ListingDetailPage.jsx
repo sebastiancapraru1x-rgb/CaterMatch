@@ -5,6 +5,7 @@ import {
   ArrowLeft, MessageSquare, Sparkles
 } from 'lucide-react';
 import api from '../services/api';
+import BackButton from '../components/BackButton';
 import { useAuth } from '../context/AuthContext';
 import { TruckMark, EventMark } from '../components/BrandMarks';
 
@@ -61,9 +62,7 @@ export default function ListingDetailPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600">
-        <ArrowLeft className="h-4 w-4" /> Back to listings
-      </Link>
+      <BackButton label="Back to listings" className="mb-4" />
 
       <div className="card overflow-hidden border border-slate-200/70 shadow-xl transition-shadow hover:shadow-2xl">
         <div className="relative h-64 w-full">
@@ -99,7 +98,7 @@ export default function ListingDetailPage() {
 
           <p className="text-slate-700 dark:text-slate-300">{listing.description}</p>
 
-          <div className="grid gap-2 rounded-xl bg-slate-50 p-4 text-sm text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 sm:grid-cols-2">
+          <div className="grid gap-2 rounded-xl bg-sand-100 p-4 text-sm text-slate-700 dark:bg-slate-800/60 dark:text-slate-300 sm:grid-cols-2">
             <span className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-brand-600" />
               {listing.city}, {listing.state_province}
@@ -124,7 +123,7 @@ export default function ListingDetailPage() {
             )}
           </div>
 
-          <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-800/60">
+          <div className="rounded-xl bg-sand-100 p-4 dark:bg-slate-800/60">
             {isOwner ? (
               <div className="space-y-3">
                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -142,7 +141,7 @@ export default function ListingDetailPage() {
                 ) : (
                   <Link
                     to={`/boost?listing_id=${listing.id}`}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50 transition dark:border-brand-500 dark:bg-slate-900 dark:text-brand-300 dark:hover:bg-slate-800"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 bg-sand-50 px-4 py-3 font-semibold text-brand-700 hover:bg-brand-50 transition dark:border-brand-500 dark:bg-slate-900 dark:text-brand-300 dark:hover:bg-slate-800"
                   >
                     <Sparkles className="h-5 w-5" /> Boost this listing
                   </Link>

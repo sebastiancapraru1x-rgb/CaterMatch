@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { MessageSquare, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import api from '../services/api';
+import BackButton from '../components/BackButton';
 import { useAuth } from '../context/AuthContext';
 import { getSocket } from '../services/socket';
 import ChatWindow from '../components/ChatWindow';
@@ -69,6 +70,7 @@ export default function MessagesPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
+      <BackButton className="mb-4" />
       <div className="mb-4 flex items-center justify-between">
         <h1 className="flex items-center gap-2 text-2xl font-extrabold text-slate-900 dark:text-white">
           <MessageSquare className="h-6 w-6 text-brand-600" /> Messages
@@ -86,7 +88,7 @@ export default function MessagesPage() {
         {/* Inbox list */}
         <div className="flex flex-col gap-2">
           {!loading && conversations.length === 0 && (
-            <p className="rounded-lg bg-slate-100 p-4 text-sm text-slate-600">
+            <p className="rounded-lg bg-sand-100 p-4 text-sm text-slate-600">
               No conversations yet. Find a listing and tap <b>Message</b> to start chatting!
             </p>
           )}
@@ -100,7 +102,7 @@ export default function MessagesPage() {
                 className={`rounded-xl border p-3 text-left transition ${
                   isActive
                     ? 'border-brand-500 bg-brand-50 ring-1 ring-brand-500'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                    : 'border-sand-200 bg-sand-50 hover:border-sand-300 hover:bg-sand-100'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -133,7 +135,7 @@ export default function MessagesPage() {
               onBack={() => setParams({}, { replace: true })}
             />
           ) : (
-            <div className="flex h-[70vh] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white text-slate-400">
+            <div className="flex h-[70vh] flex-col items-center justify-center rounded-xl border border-dashed border-sand-300 bg-sand-50 text-slate-400">
               <MessageSquare className="mb-3 h-12 w-12 opacity-40" />
               <p className="max-w-xs text-center text-sm">
                 {conversations.length

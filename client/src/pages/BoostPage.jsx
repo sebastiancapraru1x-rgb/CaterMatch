@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Sparkles, ArrowLeft, CheckCircle2, ShieldCheck, Zap, Truck, CalendarDays } from 'lucide-react';
 import api from '../services/api';
+import BackButton from '../components/BackButton';
 import { useAuth } from '../context/AuthContext';
 
 export default function BoostPage() {
@@ -56,9 +57,7 @@ export default function BoostPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <Link to="/" className="mb-4 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600">
-        <ArrowLeft className="h-4 w-4" /> Back
-      </Link>
+      <BackButton className="mb-4" />
 
       <h1 className="mb-2 flex items-center gap-2 text-2xl font-extrabold text-slate-900 dark:text-white">
         <Sparkles className="h-6 w-6 text-brand-600" /> Boost your listing

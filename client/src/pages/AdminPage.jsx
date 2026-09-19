@@ -5,6 +5,7 @@ import {
   Zap, Wallet, Plus, Trash2,
 } from 'lucide-react';
 import api from '../services/api';
+import BackButton from '../components/BackButton';
 
 export default function AdminPage() {
   const [me, setMe] = useState(null);
@@ -64,21 +65,25 @@ export default function AdminPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
-      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-brand-600 dark:text-slate-400">
-        <ArrowLeft className="h-4 w-4" /> Back to browse
-      </Link>
+      <BackButton label="Back to browse" className="mb-4" />
 
-      <div className="mt-4 flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-white shadow-md dark:bg-brand-500">
-          <Settings className="h-5.5 w-5.5" />
-        </span>
-        <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">Dev Panel</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Internal tools — staff only.</p>
+      <div className="relative mt-4 overflow-hidden rounded-2xl bg-gradient-to-r from-brand-700 via-brand-600 to-brand-500 p-5 text-white shadow-brand-glow">
+        <div className="pointer-events-none absolute -right-10 -top-14 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+        <div className="flex items-center gap-4">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
+            <Settings className="h-6 w-6" />
+          </span>
+          <div>
+            <h1 className="text-2xl font-extrabold tracking-tight">Dev Panel</h1>
+            <p className="text-sm text-white/75">Internal tools — staff only.</p>
+          </div>
+          <span className="ml-auto hidden items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold ring-1 ring-white/25 sm:inline-flex">
+            <ShieldCheck className="h-3.5 w-3.5" /> {me.user.email}
+          </span>
         </div>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      <section className="mt-6 rounded-2xl border border-sand-200 bg-sand-50 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Logged in as</h2>
         <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
           <span className="text-slate-800 dark:text-slate-200">{me.user.full_name}</span>
@@ -107,7 +112,7 @@ export default function AdminPage() {
 
 function StatCard({ label, value, icon: Icon, accent }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+    <div className="rounded-2xl border border-sand-200 bg-sand-50 p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lift dark:border-slate-700 dark:bg-slate-900">
       <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${accent}`}>
         <Icon className="h-4.5 w-4.5" />
       </span>
@@ -119,8 +124,11 @@ function StatCard({ label, value, icon: Icon, accent }) {
 
 function Section({ title, children }) {
   return (
-    <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">{title}</h2>
+    <section className="mt-6 rounded-2xl border border-sand-200 bg-sand-50 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+      <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        <span className="inline-block h-1 w-5 rounded-full bg-brand-500" />
+        {title}
+      </h2>
       <div className="mt-3">{children}</div>
     </section>
   );
@@ -181,7 +189,7 @@ function UsersSection({ users }) {
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
             {users.map((u) => (
-              <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+              <tr key={u.id} className="hover:bg-sand-50 dark:hover:bg-slate-800">
                 <td className="px-3 py-2.5 font-medium text-slate-800 dark:text-slate-200">{u.full_name}</td>
                 <td className="px-3 py-2.5 text-slate-600 dark:text-slate-400">{u.email}</td>
                 <td className="px-3 py-2.5 text-slate-500 dark:text-slate-400">
@@ -204,7 +212,7 @@ function TransactionsSection({ txns }) {
       ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+            <thead className="bg-sand-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-400">
               <tr>
                 <th className="px-3 py-2.5">User</th>
                 <th className="px-3 py-2.5">Listing</th>
@@ -215,7 +223,7 @@ function TransactionsSection({ txns }) {
             </thead>
             <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
               {txns.map((t) => (
-                <tr key={t.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+                <tr key={t.id} className="hover:bg-sand-50 dark:hover:bg-slate-800">
                   <td className="px-3 py-2.5 text-slate-600 dark:text-slate-400">{t.user_email}</td>
                   <td className="px-3 py-2.5 font-medium text-slate-800 dark:text-slate-200">{t.listing_title}</td>
                   <td className="px-3 py-2.5 font-semibold text-slate-900 dark:text-slate-100">${t.amount_paid}</td>

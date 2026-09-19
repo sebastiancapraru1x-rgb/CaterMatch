@@ -11,7 +11,7 @@ export default function CategoryFilter({ category, onChange, categories = [] }) 
             className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
               isActive
                 ? 'bg-slate-900 text-white'
-                : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100'
+                : 'bg-sand-50 text-slate-600 ring-1 ring-sand-200 hover:bg-sand-100'
             }`}
           >
             {label}

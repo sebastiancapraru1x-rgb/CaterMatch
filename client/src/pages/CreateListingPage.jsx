@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ImagePlus, X, Loader2, Truck, CalendarDays } from 'lucide-react';
 import api from '../services/api';
+import BackButton from '../components/BackButton';
 import { useAuth } from '../context/AuthContext';
 
 const CATEGORIES = [
@@ -106,13 +107,14 @@ export default function CreateListingPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
+      <BackButton className="mb-4" />
       <h1 className="mb-2 text-2xl font-extrabold text-slate-900 dark:text-white">Post a listing</h1>
       <p className="mb-6 text-sm text-slate-500">
         Caterers, food trucks, and home cooks — connect directly with hosts near you.
       </p>
 
       {/* Type selector */}
-      <div className="mb-6 grid grid-cols-2 gap-2 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200">
+      <div className="mb-6 grid grid-cols-2 gap-2 rounded-xl bg-sand-100 p-1.5 shadow-sm ring-1 ring-sand-200">
         <button
           onClick={() => setType('vendor_service')}
           className={`flex items-center justify-center gap-2 rounded-lg px-3 py-3 text-sm font-semibold ${type === 'vendor_service' ? 'bg-brand-600 text-white' : 'text-slate-600 hover:bg-orange-50'}`}

@@ -18,6 +18,14 @@ export default {
           800: '#8F3316',
           900: '#6C270F',
         },
+        // Warm beige neutrals — page background & card surfaces.
+        sand: {
+          50: '#FBF8F2', // card surface (warm cream)
+          100: '#F4EFE5', // page background (beige)
+          200: '#E9E0CF', // borders on beige
+          300: '#D9CBB2',
+          400: '#C4B394',
+        },
       },
       fontFamily: {
         sans: [

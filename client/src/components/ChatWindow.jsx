@@ -76,7 +76,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
   }
 
   return (
-    <div className="flex h-[70vh] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="flex h-[70vh] flex-col rounded-xl border border-sand-200 bg-sand-50 shadow-sm">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-3">
         <button onClick={onBack} className="rounded-lg p-1 text-slate-500 hover:bg-slate-100 sm:hidden" aria-label="Back">
@@ -87,7 +87,7 @@ export default function ChatWindow({ conversationId, currentUserId, onBack }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50/60 p-4">
+      <div className="flex-1 space-y-3 overflow-y-auto bg-sand-100/70 p-4">
         {loading && <p className="text-center text-sm text-slate-400">Loading messages…</p>}
         {!loading && error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{error}</p>}
         {!loading && !error && messages.length === 0 && (

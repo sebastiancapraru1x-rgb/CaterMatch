@@ -32,7 +32,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-[#FAFAF8] to-slate-100 px-4 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-100/60 via-sand-100 to-amber-50/80 px-4 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <div className="card w-full max-w-md p-8">
         <div className="mb-6 flex flex-col items-center gap-4 text-center">
           <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-brand-50 shadow-soft dark:from-brand-600 dark:to-brand-800">
